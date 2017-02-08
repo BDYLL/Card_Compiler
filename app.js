@@ -1,10 +1,27 @@
+var palabras = ["class",
+						"program", 
+						"void", 
+						"if", 
+						"while", 
+						"for", 
+						"else",
+						"flip", 
+						"getCard", 
+						"flipCard", 
+						"putCard", 
+						"isBlack", 
+						"isHeart",
+						"isClubs",
+					  	"isDiamond",
+					    "isSpades",
+					    "isNotRed",
+					    "isNotBlack",
+					    "isNotHeart",
+					    "isNotClubs",
+					    "isNotDiamond",
+					    "isNotSpades"];
 
-		var palabras = ["class program","void","program()","if","else","while","iterate"
-						,"valor", "isRed", "isBlack",
-						"is1", "is2", "is3", "is4", "is5", "is6", "is7",
-  						"is8", "is9", "is10", "is11", "is12", "is13",
-  						"isCorazon","isTrebol","isDiamante","isPica",
-  						"perteneceA","isFaceUp","hasCards"];
+var globalTokens = [];					
 
 		function testText(){
 			var code = document.getElementById("codeArea").value;
@@ -41,6 +58,21 @@
 			return false;
 		}
 
+function program(){
+	
+}
+
+function exigir(token){
+	if(token===globalTokens[0]){
+		globalTokens.splice(0,1);
+		return true;
+	}
+	return false;
+}
+
+function verificar(token){
+	return token===globalTokens[0];
+}
 
 
 $(function() {
