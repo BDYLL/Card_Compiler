@@ -1,5 +1,10 @@
 
-		var palabras = ["alo","xD"];
+		var palabras = ["class program","void","program()","if","else","while","iterate"
+						,"valor", "isRed", "isBlack",
+						"is1", "is2", "is3", "is4", "is5", "is6", "is7",
+  						"is8", "is9", "is10", "is11", "is12", "is13",
+  						"isCorazon","isTrebol","isDiamante","isPica",
+  						"perteneceA","isFaceUp","hasCards"];
 
 		function testText(){
 			var code = document.getElementById("codeArea").value;
