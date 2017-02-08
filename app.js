@@ -26,14 +26,15 @@ var globalTokens = [];
 		function testText(){
 			var code = document.getElementById("codeArea").value;
 			checkCode(code);
+			program();
 		}
 
 		function checkCode(code){
 			var correct = true;
-			var tokens = code.replace( /\n/, " " ).split(" ");		
+			var globalTokens = code.replace( /\n/, " " ).split(" ");		
 			var i, j;		
-			for(i=0; i<tokens.length-1; i++){
-				correct = checkToken(tokens[i]);
+			for(i=0; i<globalTokens.length-1; i++){
+				correct = checkToken(globalTokens[i]);
 				if(correct == false){
 					break;
 				}
