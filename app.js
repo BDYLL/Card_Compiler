@@ -19,7 +19,7 @@ var palabras = ["class",
 					    "isNotHeart",
 					    "isNotClubs",
 					    "isNotDiamond",
-					    "isNotSpades"];
+					    "isNotSpades","{","}","(",")"];
 
 var globalTokens = [];					
 
@@ -31,7 +31,7 @@ var globalTokens = [];
 
 		function checkCode(code){
 			var correct = true;
-			var globalTokens = code.replace( /\n/, " " ).split(" ");		
+			globalTokens = code.replace( /\n/, " " ).split(" ");		
 			var i, j;		
 			for(i=0; i<globalTokens.length-1; i++){
 				correct = checkToken(globalTokens[i]);
@@ -41,6 +41,7 @@ var globalTokens = [];
 			}
 			if (correct){
 				console.log("El código es correcto!");
+				program();
 			}
 			else{
 				console.log("El código NO es correcto!")
@@ -59,8 +60,28 @@ var globalTokens = [];
 			return false;
 		}
 
+function error(token, expected){
+
+}
+
 function program(){
-	
+	if(exigir("class")){
+		if(exigir("program")){
+			if(exigir("{")){
+				if(verificar("void")){
+					functions();
+				}
+				main_function();
+				if(!exigir("}")){
+
+				}
+			}
+		}
+	}
+}
+
+function functions(){
+
 }
 
 function exigir(token){
