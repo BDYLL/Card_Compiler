@@ -32,7 +32,7 @@ var globalTokens = [];
 		function checkCode(code){
 			var correct = true;
 
-			globalTokens = code.replace( /[\n\r]/g," ").split(" ");	
+			globalTokens = code.replace( /[\n\r\t]/g," ").split(" ");	
 
 			globalTokens=globalTokens.filter(e=>e!=="");
 
