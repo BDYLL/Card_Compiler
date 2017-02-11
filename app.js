@@ -31,16 +31,24 @@ var globalTokens = [];
 
 		function checkCode(code){
 			var correct = true;
-			globalTokens = code.replace( /\n/, " " ).split(" ");		
+
+			globalTokens = code.replace( /[\n\r]/g," ").split(" ");	
+
+			globalTokens=globalTokens.filter(e=>e!=="");
+
+
 			var i, j;		
-			for(i=0; i<globalTokens.length-1; i++){
+			for(i=0; i<globalTokens.length; i++){
 				correct = checkToken(globalTokens[i]);
-				if(correct == false){
+				if(!correct){
 					break;
 				}
 			}
+
+			console.log(globalTokens);
 			if (correct){
 				console.log("El código es correcto!");
+				
 				program();
 			}
 			else{
@@ -50,14 +58,25 @@ var globalTokens = [];
 
 		function checkToken(token){
 			var i;
-			for(i=0; i<palabras.length; i++){
-				if (token.localeCompare(palabras[i]) == 0){
+
+
+			if(token.match(/^[a-z]+$/i)!=null || token.match(/^[0-9]+$/)!=null){
+				return true;
+			}
+
+			/*for(i=0; i<palabras.length; i++){
+				if (token.localeCompare(palabras[i]) === 0){
 					console.log(token+" es parte de las palabras reservadas!");
 					return true;				
 				}
 			}
-			console.log(token+" NO es parte de las palabras reservadas!");
-			return false;
+			*/
+
+			i=palabras.indexOf(token);
+			console.log(token);
+
+			//console.log(token+" NO es parte de las palabras reservadas!");
+			return i>=0;
 		}
 
 function error(token, expected){
