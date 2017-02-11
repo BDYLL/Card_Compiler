@@ -90,7 +90,7 @@ function program(){
 				if(verificar("void")){
 					functions();
 				}
-				main_function();
+				mainFunction();
 				if(!exigir("}")){
 
 				}
@@ -101,6 +101,10 @@ function program(){
 
 function functions(){
 
+}
+
+function mainFunction(){
+	
 }
 
 function exigir(token){
