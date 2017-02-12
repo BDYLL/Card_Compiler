@@ -13,6 +13,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
 	<script src="jquery-linedtextarea.js"></script>
 	<link href="jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
+    <link href="css/index.css" rel="stylesheet">
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,16 +24,29 @@
 </head>
 <body>
 	
-	<link href="jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
+	<div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea class="lined" id="codeArea" rows="25" cols="76"></textarea>
+                        <button type="button" onclick="testText()">Execute</button> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 console">
+                        <p id="consoleText" class="">Esta es la consola, donde apareceran errores en el codigo al momento de ejecutarse: </p>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <!-- aqui poner el front end de las cartas-->
+            </div>
+        </div>
+    </div>
 	
-	<script type="text/javascript" src="app.js"></script>
-
-	
-	<textarea class="lined" id="codeArea" rows="5" cols="50"></textarea>
-    <button type="button" onclick="testText()">Execute</button> 
-    
-    
    
-
+    <script type="text/javascript" src="app.js"></script>
 </body>
 </html>
