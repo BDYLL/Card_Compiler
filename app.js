@@ -44,18 +44,33 @@ var globalTokens = [];
 					break;
 				}
 			}
-
+            let consoleMessage;
 			console.log(globalTokens);
 			if (correct){
 				console.log("El código es correcto!");
-				
+                
+				consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br><br>";
+                document.getElementById("consoleText").innerHTML += consoleMessage;
+                
 				program();
 			}
 			else{
-				console.log("El código NO es correcto!")
+				console.log("El código NO es correcto!");
+                consoleMessage = "<span class=\"consoleError\"> Invalid Token in line "+ getRow(code, globalTokens[i]) + ": "+ globalTokens[i] +" </span><br><br>";
+                document.getElementById("consoleText").innerHTML += consoleMessage;
 			}
 		}
-
+        function getRow(code, token){
+            let codeInRows = code.split("\n");
+            for(i = 0; i < codeInRows.length; i++){
+                if(codeInRows[i].includes(token)){
+                    console.log(i);
+                    return i+1;
+                }
+            }
+            console.log("yu wut m8");
+            return -1;
+        }
 		function checkToken(token){
 			var i;
 
