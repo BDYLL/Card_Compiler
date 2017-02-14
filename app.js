@@ -29,10 +29,22 @@ var globalTokens = [];
 			program();
 		}
 
+
 		function checkCode(code){
 			var correct = true;
 
-			globalTokens = code.replace( /[\n\r\t]/g," ").split(" ");	
+			var tmpStr=code;
+
+			tmpStr=tmpStr.replace(/\{/g," { ");
+
+			tmpStr=tmpStr.replace(/\}/g," } ");
+
+			tmpStr=tmpStr.replace(/\(/g," ( ");
+
+			tmpStr=tmpStr.replace(/\)/g," ) ");
+
+
+			globalTokens = tmpStr.replace( /[\n\r\t]/g," ").split(" ");	
 
 			globalTokens=globalTokens.filter(e=>e!=="");
 
