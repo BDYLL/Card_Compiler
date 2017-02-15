@@ -35,16 +35,22 @@ var globalTokens = [];
 
 			var tmpStr=code;
 
+
 			tmpStr=tmpStr.replace(/\{/g," { ");
-
 			tmpStr=tmpStr.replace(/\}/g," } ");
-
 			tmpStr=tmpStr.replace(/\(/g," ( ");
-
 			tmpStr=tmpStr.replace(/\)/g," ) ");
+			tmpStr=tmpStr.replace(/\<[^\=]/g," < ");
+			tmpStr=tmpStr.replace(/\>[^\=]/g," > ");
+			tmpStr=tmpStr.replace(/\<\=/g," <= ");
+			tmpStr=tmpStr.replace(/\>\=/g," >= ");
+			tmpStr=tmpStr.replace(/\=\=/g," == ");
+			tmpStr=tmpStr.replace(/\!\=/g," != ");
 
+			console.log(tmpStr);
 
 			globalTokens = tmpStr.replace( /[\n\r\t]/g," ").split(" ");	
+
 
 			globalTokens=globalTokens.filter(e=>e!=="");
 
