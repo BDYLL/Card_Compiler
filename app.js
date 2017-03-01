@@ -1,4 +1,5 @@
-var palabras = ["class",
+var palabras = [
+	"class",
 	"program",
 	"void",
 	"if",
@@ -19,7 +20,17 @@ var palabras = ["class",
 	"isNotHeart",
 	"isNotClubs",
 	"isNotDiamond",
-	"isNotSpades", "{", "}", "(", ")", "<", ">", "<=", ">=", "==", "!="];
+	"isNotSpades", 
+	"{", 
+	"}", 
+	"(", 
+	")", 
+	"<", 
+	">", 
+	"<=", 
+	">=", 
+	"==", 
+	"!="];
 
 var globalTokens = [];
 
