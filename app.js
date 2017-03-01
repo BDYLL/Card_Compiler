@@ -21,16 +21,16 @@ var palabras = [
 	"isNotHeart",
 	"isNotClubs",
 	"isNotDiamond",
-	"isNotSpades", 
-	"{", 
-	"}", 
-	"(", 
-	")", 
-	"<", 
-	">", 
-	"<=", 
-	">=", 
-	"==", 
+	"isNotSpades",
+	"{",
+	"}",
+	"(",
+	")",
+	"<",
+	">",
+	"<=",
+	">=",
+	"==",
 	"!="];
 
 var globalTokens = [];
@@ -132,9 +132,7 @@ function program() {
 	if (exigir("class")) {
 		if (exigir("program")) {
 			if (exigir("{")) {
-				if (verificar("void")) {
-					functions();
-				}
+				functions();
 				mainFunction();
 				if (!exigir("}")) {
 
@@ -145,11 +143,153 @@ function program() {
 }
 
 function functions() {
+	if (verificar("void")) {
+		_function();
+		functionAlpha();
+	}
+}
 
+function _function() {
+	if (exigir("void")) {
+		if (exigir(globalTokens[0])) {
+			if (exigir("(")) {
+				if (exigir(")")) {
+					if (exigir("{")) {
+						body();
+						if (!exigir("}")) {
+
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+function functionAlpha() {
+	if (verificar("void")) {
+		functions();
+	}
 }
 
 function mainFunction() {
+	if (exigir("program")) {
+		if (exigir("(")) {
+			if (exigir(")")) {
+				if (exigir("{")) {
+					body();
+					if (!exigir("}")) {
+					}
+				}
+			}
+		}
+	}
+}
 
+function body() {
+	if (verificar("flip")) {
+		if (!exigir("flip")) {
+		}
+	}
+	else if (verificar("getCard")) {
+		exigir("getCard");
+		callFunction();
+	}
+	else if (verificar("putCard")) {
+		exigir("putCard");
+		callFunction();
+	}
+	else if (verificar("if")) {
+
+	}
+	else if (verificar("while")) {
+
+	}
+	else if (verificar("iterate")) {
+
+	}
+	else if (verificarFunctionName(globalTokens[0])) {
+
+	}
+	else {
+
+	}
+	bodyAlpha();
+}
+
+function ifexpression() {
+	if (exigir("if")) {
+		if (exigir("(")) {
+			conditional();
+			if (exigir(")")) {
+				if (exigir(")")) {
+					if (exigir("{")) {
+						body();
+						if (exigir("}")) {
+							if (verificar("else")) {
+								if (exigir("else")) {
+									if (exigir("{")) {
+										body();
+										if (!exigir("}")) {
+											console.log("error");
+										}
+									}
+								}
+								else {
+									console.log("error");
+								}
+							}
+							else {
+								console.log("error");
+							}
+						}
+						else {
+							console.log("error");
+						}
+					}
+					else {
+						console.log("error");
+					}
+				}
+				else {
+					console.log("error");
+				}
+			}
+			else {
+				console.log("error");
+			}
+		}
+		else {
+			console.log("error");
+		}
+	}
+	else {
+		console.log("error");
+	}
+}
+
+function whileExpression() {
+
+}
+
+function iterateExpression() {
+
+}
+
+function callFunction() {
+	if (exigir("(")) {
+		if (exigirNumero(globalTokens[0])) {
+			if (!exigir(")")) {
+
+			}
+		}
+	}
+}
+
+function bodyAlpha() {
+	if (verificarFunctionName(globalTokens[0])) {
+		body();
+	}
 }
 
 function exigir(token) {
@@ -164,6 +304,21 @@ function verificar(token) {
 	return token === globalTokens[0];
 }
 
+function exigirFunctionName(token) {
+	if (token.match(/^[a-z]+$/i)) {
+		globalTokens.splice(0, 1);
+		return true;
+	}
+	return false;
+}
+
+function verificarFunctionName(token) {
+	return token.match(/^[a-z]+$/i);
+}
+
+function exigirNumero(token) {
+	return token.match(/^[0-9]+$/);
+}
 
 $(function () {
 	$(".lined").linedtextarea({
