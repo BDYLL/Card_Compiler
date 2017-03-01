@@ -206,7 +206,7 @@ function body() {
 
 	}
 	else if (verificar("iterate")) {
-
+		iterateExpression();
 	}
 	else if (verificarFunctionName(globalTokens[0])) {
 
@@ -279,7 +279,7 @@ function iterateExpression() {
 					if(exigir("{")){
 						body();
 						if(!exigir("}")){
-							
+
 						}
 					}
 				}
