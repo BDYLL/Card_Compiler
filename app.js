@@ -200,7 +200,7 @@ function body() {
 		callFunction();
 	}
 	else if (verificar("if")) {
-
+		ifexpression();
 	}
 	else if (verificar("while")) {
 		whileExpression();
@@ -209,12 +209,27 @@ function body() {
 		iterateExpression();
 	}
 	else if (verificarFunctionName(globalTokens[0])) {
-
+		customerFunctionExpression();
 	}
 	else {
-
+		console.log("error");
 	}
 	bodyAlpha();
+}
+
+function customerFunctionExpression(){
+	if(exigirFunctionName(globalTokens[0])){
+		if(exigir("(")){
+			if(exigir(")")){
+				if(exigir("{")){
+					body();
+					if(!exigir("}")){
+
+					}
+				}
+			}
+		}
+	}
 }
 
 function ifexpression() {
