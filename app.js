@@ -5,6 +5,7 @@ var palabras = [
 	"if",
 	"while",
 	"for",
+	"iterate",
 	"else",
 	"flip",
 	"getCard",
