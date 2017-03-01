@@ -203,7 +203,7 @@ function body() {
 
 	}
 	else if (verificar("while")) {
-
+		whileExpression();
 	}
 	else if (verificar("iterate")) {
 		iterateExpression();
