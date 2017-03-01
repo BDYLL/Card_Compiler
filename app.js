@@ -269,11 +269,23 @@ function ifexpression() {
 }
 
 function whileExpression() {
-
 }
 
 function iterateExpression() {
-
+	if(exigir("iterate")){
+		if(exigir("(")){
+			if(exigirNumero(globalTokens[0])){
+				if(exigir(")")){
+					if(exigir("{")){
+						body();
+						if(!exigir("}")){
+							
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 function callFunction() {
@@ -317,6 +329,14 @@ function verificarFunctionName(token) {
 }
 
 function exigirNumero(token) {
+	if (token.match(/^[0-9]+$/)) {
+		globalTokens.splice(0, 1);
+		return true;
+	}
+	return false;
+}
+
+function verificarNumero(token){
 	return token.match(/^[0-9]+$/);
 }
 
