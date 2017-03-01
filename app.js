@@ -112,7 +112,7 @@ function checkToken(token) {
 	/*for(i=0; i<palabras.length; i++){
 		if (token.localeCompare(palabras[i]) === 0){
 			console.log(token+" es parte de las palabras reservadas!");
-			return true;				
+			return true;
 		}
 	}
 	*/
@@ -288,7 +288,7 @@ function whileExpression(){
 		if(exigir("(")){
 			conditional();
 			if(!exigir(")")){
-				console.log("error");					
+				console.log("error");
 			}
 		}else{
 			console.log("error");
@@ -331,6 +331,99 @@ function bodyAlpha() {
 	}
 }
 
+//conditional
+function conditional(){
+	if(simpleCondition()){
+		//si entra es correcto y no se hace nada
+	}else if(verificar("VALUE")){
+		exigir("VALUE");
+		operator();
+		if(!exigirNumero(globalTokens[0])){ console.log("error");}
+	}else if(verificar("isEmpty")){
+		exigir("isEmpty");}
+		callFunction();
+	}else if(verificar("isNotEmpty")){
+		exigir("isNotEmpty");
+		callFunction();
+	}else{
+		console.log("error");
+	}
+}
+function simpleCondition(){
+	if(verificar("isRed")){
+		exigir("isRed");
+		return true;
+	}
+	else if(verificar("isBlack")){
+		exigir("isBlack");
+		return true;
+	}
+	else if(verificar("isHeart")){
+		exigir("isHeart");
+		return true;
+	}
+	else if(verificar("isClubs")){
+		exigir("isClubs");
+		return true;
+	}
+	else if(verificar("isDiamond")){
+		exigir("isDiamond");
+		return true;
+	}
+	else if(verificar("isSpades")){
+		exigir("isSpades");
+		return true;
+	}
+	else if(verificar("isNotRed")){
+		exigir("isNotRed");
+		return true;
+	}
+	else if(verificar("isNotBlack")){
+		exigir("isNotBlack");
+		return true;
+	}
+	else if(verificar("isNotHeart")){
+		exigir("isNotHeart");
+		return true;
+	}
+	else if(verificar("isNotClubs")){
+		exigir("isNotClubs");
+		return true;
+	}
+	else if(verificar("isNotDiamond")){
+		exigir("isNotDiamond");
+		return true;
+	}
+	else if(verificar("isNotSpades")){
+		exigir("isNotSpades");
+		return true;
+	}else{
+		return false;
+	}
+}
+function operator(){
+	if(verificar("<")){
+		exigir("<");
+	}
+	else if(verificar(">")){
+		exigir(">");
+	}
+	else if(verificar("<=")){
+		exigir("<=");
+	}
+	else if(verificar(">=")){
+		exigir(">=");
+	}
+	else if(verificar("==")){
+		exigir("==");
+	}
+	else if(verificar("!=")){
+		exigir("!=");
+	}
+	else{
+		console.log("error");
+	}
+}
 function exigir(token) {
 	if (token === globalTokens[0]) {
 		globalTokens.splice(0, 1);
