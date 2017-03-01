@@ -268,7 +268,19 @@ function ifexpression() {
 	}
 }
 
-function whileExpression() {
+function whileExpression(){
+	if(exigir("while")){
+		if(exigir("(")){
+			conditional();
+			if(!exigir(")")){
+				console.log("error");					
+			}
+		}else{
+			console.log("error");
+		}
+	}else{
+		console.log("error");
+	}
 }
 
 function iterateExpression() {
