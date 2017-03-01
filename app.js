@@ -217,13 +217,13 @@ function body() {
 	bodyAlpha();
 }
 
-function customerFunctionExpression(){
-	if(exigirFunctionName(globalTokens[0])){
-		if(exigir("(")){
-			if(exigir(")")){
-				if(exigir("{")){
+function customerFunctionExpression() {
+	if (exigirFunctionName(globalTokens[0])) {
+		if (exigir("(")) {
+			if (exigir(")")) {
+				if (exigir("{")) {
 					body();
-					if(!exigir("}")){
+					if (!exigir("}")) {
 
 					}
 				}
@@ -237,29 +237,21 @@ function ifexpression() {
 		if (exigir("(")) {
 			conditional();
 			if (exigir(")")) {
-				if (exigir(")")) {
-					if (exigir("{")) {
-						body();
-						if (exigir("}")) {
-							if (verificar("else")) {
-								if (exigir("else")) {
-									if (exigir("{")) {
-										body();
-										if (!exigir("}")) {
-											console.log("error");
-										}
+				if (exigir("{")) {
+					body();
+					if (exigir("}")) {
+						if (verificar("else")) {
+							if (exigir("else")) {
+								if (exigir("{")) {
+									body();
+									if (!exigir("}")) {
+										console.log("error");
 									}
-								}
-								else {
-									console.log("error");
 								}
 							}
 							else {
 								console.log("error");
 							}
-						}
-						else {
-							console.log("error");
 						}
 					}
 					else {
@@ -269,6 +261,7 @@ function ifexpression() {
 				else {
 					console.log("error");
 				}
+
 			}
 			else {
 				console.log("error");
@@ -283,29 +276,29 @@ function ifexpression() {
 	}
 }
 
-function whileExpression(){
-	if(exigir("while")){
-		if(exigir("(")){
+function whileExpression() {
+	if (exigir("while")) {
+		if (exigir("(")) {
 			conditional();
-			if(!exigir(")")){
+			if (!exigir(")")) {
 				console.log("error");
 			}
-		}else{
+		} else {
 			console.log("error");
 		}
-	}else{
+	} else {
 		console.log("error");
 	}
 }
 
 function iterateExpression() {
-	if(exigir("iterate")){
-		if(exigir("(")){
-			if(exigirNumero(globalTokens[0])){
-				if(exigir(")")){
-					if(exigir("{")){
+	if (exigir("iterate")) {
+		if (exigir("(")) {
+			if (exigirNumero(globalTokens[0])) {
+				if (exigir(")")) {
+					if (exigir("{")) {
 						body();
-						if(!exigir("}")){
+						if (!exigir("}")) {
 
 						}
 					}
@@ -332,95 +325,95 @@ function bodyAlpha() {
 }
 
 //conditional
-function conditional(){
-	if(simpleCondition()){
+function conditional() {
+	if (simpleCondition()) {
 		//si entra es correcto y no se hace nada
-	}else if(verificar("VALUE")){
+	} else if (verificar("VALUE")) {
 		exigir("VALUE");
 		operator();
-		if(!exigirNumero(globalTokens[0])){ console.log("error");}
-	}else if(verificar("isEmpty")){
+		if (!exigirNumero(globalTokens[0])) { console.log("error"); }
+	} else if (verificar("isEmpty")) {
 		exigir("isEmpty");
 		callFunction();
-	}else if(verificar("isNotEmpty")){
+	} else if (verificar("isNotEmpty")) {
 		exigir("isNotEmpty");
 		callFunction();
-	}else{
+	} else {
 		console.log("error");
 	}
 }
-function simpleCondition(){
-	if(verificar("isRed")){
+function simpleCondition() {
+	if (verificar("isRed")) {
 		exigir("isRed");
 		return true;
 	}
-	else if(verificar("isBlack")){
+	else if (verificar("isBlack")) {
 		exigir("isBlack");
 		return true;
 	}
-	else if(verificar("isHeart")){
+	else if (verificar("isHeart")) {
 		exigir("isHeart");
 		return true;
 	}
-	else if(verificar("isClubs")){
+	else if (verificar("isClubs")) {
 		exigir("isClubs");
 		return true;
 	}
-	else if(verificar("isDiamond")){
+	else if (verificar("isDiamond")) {
 		exigir("isDiamond");
 		return true;
 	}
-	else if(verificar("isSpades")){
+	else if (verificar("isSpades")) {
 		exigir("isSpades");
 		return true;
 	}
-	else if(verificar("isNotRed")){
+	else if (verificar("isNotRed")) {
 		exigir("isNotRed");
 		return true;
 	}
-	else if(verificar("isNotBlack")){
+	else if (verificar("isNotBlack")) {
 		exigir("isNotBlack");
 		return true;
 	}
-	else if(verificar("isNotHeart")){
+	else if (verificar("isNotHeart")) {
 		exigir("isNotHeart");
 		return true;
 	}
-	else if(verificar("isNotClubs")){
+	else if (verificar("isNotClubs")) {
 		exigir("isNotClubs");
 		return true;
 	}
-	else if(verificar("isNotDiamond")){
+	else if (verificar("isNotDiamond")) {
 		exigir("isNotDiamond");
 		return true;
 	}
-	else if(verificar("isNotSpades")){
+	else if (verificar("isNotSpades")) {
 		exigir("isNotSpades");
 		return true;
-	}else{
+	} else {
 		return false;
 	}
 }
-function operator(){
-	if(verificar("<")){
+function operator() {
+	if (verificar("<")) {
 		exigir("<");
 	}
-	else if(verificar(">")){
+	else if (verificar(">")) {
 		exigir(">");
 	}
-	else if(verificar("<=")){
+	else if (verificar("<=")) {
 		exigir("<=");
 	}
-	else if(verificar(">=")){
+	else if (verificar(">=")) {
 		exigir(">=");
 	}
-	else if(verificar("==")){
+	else if (verificar("==")) {
 		exigir("==");
 	}
-	else if(verificar("!=")){
+	else if (verificar("!=")) {
 		exigir("!=");
 	}
-	else{
+	else {
 		console.log("error");
 	}
 }
@@ -456,7 +449,7 @@ function exigirNumero(token) {
 	return false;
 }
 
-function verificarNumero(token){
+function verificarNumero(token) {
 	return token.match(/^[0-9]+$/);
 }
 
