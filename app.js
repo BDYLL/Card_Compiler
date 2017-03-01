@@ -340,7 +340,7 @@ function conditional(){
 		operator();
 		if(!exigirNumero(globalTokens[0])){ console.log("error");}
 	}else if(verificar("isEmpty")){
-		exigir("isEmpty");}
+		exigir("isEmpty");
 		callFunction();
 	}else if(verificar("isNotEmpty")){
 		exigir("isNotEmpty");
