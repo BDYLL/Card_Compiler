@@ -160,7 +160,7 @@ function checkToken(token) {
 function error(expected) {
 	console.log("Error in Line " + TokensLine[currentToken] +". Expected '"+ expected +"' instead of '" + globalTokens[0] + "'.");
 	correctCode = false;
-	consoleMessage = "<span class=\"consoleError\"> Error in Line "+ TokensLine[currentToken] +". Expected 'class' instead of '" + globalTokens[0]   +"'. </span><br><br>";
+	consoleMessage = "<span class=\"consoleError\"> Error in Line "+ TokensLine[currentToken] +". Expected "+expected+" instead of '" + globalTokens[0]   +"'. </span><br><br>";
 	document.getElementById("consoleText").innerHTML += consoleMessage;
 }
 
@@ -269,7 +269,7 @@ function body() {
 		iterateExpression();
 	}
 	else if (verificarFunctionName(globalTokens[0])) {
-		customerFunctionExpression();
+		exigirFunctionName(globalTokens[0]);
 	}
 	else {
 		error("expression in body");
