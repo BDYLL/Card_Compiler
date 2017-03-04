@@ -378,10 +378,16 @@ function iterateExpression() {
 					if (exigir("{")) {
 						body();
 						if (!exigir("}")) {
-
+							error("}");
 						}
+					}else{
+						error("{");
 					}
+				}else{
+					error(")");
 				}
+			}else{
+				error("valid number");
 			}
 		}else{
 			error("(");
@@ -395,9 +401,13 @@ function callFunction() {
 	if (exigir("(")) {
 		if (exigirNumero(globalTokens[0])) {
 			if (!exigir(")")) {
-
+				error(")");
 			}
+		}else{
+			error("Valid number");
 		}
+	}else{
+		error("(");
 	}
 }
 
@@ -414,7 +424,7 @@ function conditional() {
 	} else if (verificar("VALUE")) {
 		exigir("VALUE");
 		operator();
-		if (!exigirNumero(globalTokens[0])) { console.log("error"); }
+		if (!exigirNumero(globalTokens[0])) { error("valid number"); }
 	} else if (verificar("isEmpty")) {
 		exigir("isEmpty");
 		callFunction();
@@ -422,7 +432,7 @@ function conditional() {
 		exigir("isNotEmpty");
 		callFunction();
 	} else {
-		console.log("error");
+		error("valid conditional");
 	}
 }
 function simpleCondition() {
@@ -497,7 +507,7 @@ function operator() {
 		exigir("!=");
 	}
 	else {
-		console.log("error");
+		error("valid operator");
 	}
 }
 function exigir(token) {
