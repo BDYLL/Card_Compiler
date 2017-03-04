@@ -34,11 +34,13 @@ var palabras = [
 	"!="];
 
 var globalTokens = [];
+var TokensLine = [];
+var currentToken;
+var correctCode;
 
 function testText() {
 	var code = document.getElementById("codeArea").value;
 	checkCode(code);
-	program();
 }
 
 
@@ -65,8 +67,7 @@ function checkCode(code) {
 
 
 	globalTokens = globalTokens.filter(e => e !== "");
-
-
+	getRowsPerToken(code);
 	var i, j;
 	for (i = 0; i < globalTokens.length; i++) {
 		correct = checkToken(globalTokens[i]);
@@ -78,11 +79,16 @@ function checkCode(code) {
 	console.log(globalTokens);
 	if (correct) {
 		console.log("El código es correcto!");
-
-		consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br><br>";
-		document.getElementById("consoleText").innerHTML += consoleMessage;
-
+		correctCode = true;
+		currentToken = 0;
 		program();
+		if(correctCode){
+			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br><br>";
+			document.getElementById("consoleText").innerHTML += consoleMessage;
+		}
+
+
+
 	}
 	else {
 		console.log("El código NO es correcto!");
@@ -100,6 +106,33 @@ function getRow(code, token) {
 	}
 	console.log("yu wut m8");
 	return -1;
+}
+function getRowsPerToken(code){
+	TokensLine = [];
+	let tmpStr;
+	let rowTokens;
+	let codeInRows = code.split("\n");
+	for(let i = 0; i < codeInRows.length; i++){
+		rowTokens = [];
+		tmpStr = codeInRows[i];
+		tmpStr = tmpStr.replace(/\{/g, " { ");
+		tmpStr = tmpStr.replace(/\}/g, " } ");
+		tmpStr = tmpStr.replace(/\(/g, " ( ");
+		tmpStr = tmpStr.replace(/\)/g, " ) ");
+		tmpStr = tmpStr.replace(/\<[^\=]/g, " < ");
+		tmpStr = tmpStr.replace(/\>[^\=]/g, " > ");
+		tmpStr = tmpStr.replace(/\<\=/g, " <= ");
+		tmpStr = tmpStr.replace(/\>\=/g, " >= ");
+		tmpStr = tmpStr.replace(/\=\=/g, " == ");
+		tmpStr = tmpStr.replace(/\!\=/g, " != ");
+		rowTokens = tmpStr.replace(/[\n\r\t]/g, " ").split(" ");
+		rowTokens = rowTokens.filter(e => e !== "");
+		for(let j = 0; j < rowTokens.length; j++){
+			TokensLine.push(i+1);
+
+		}
+
+	}
 }
 function checkToken(token) {
 	var i;
@@ -124,8 +157,11 @@ function checkToken(token) {
 	return i >= 0;
 }
 
-function error(token, expected) {
-
+function error(expected) {
+	console.log("Error in Line " + TokensLine[currentToken] +". Expected '"+ expected +"' instead of '" + globalTokens[0] + "'.");
+	correctCode = false;
+	consoleMessage = "<span class=\"consoleError\"> Error in Line "+ TokensLine[currentToken] +". Expected 'class' instead of '" + globalTokens[0]   +"'. </span><br><br>";
+	document.getElementById("consoleText").innerHTML += consoleMessage;
 }
 
 function program() {
@@ -135,10 +171,16 @@ function program() {
 				functions();
 				mainFunction();
 				if (!exigir("}")) {
-
+					error("}");
 				}
+			}else{
+				error("{");
 			}
+		}else{
+			error("program");
 		}
+	}else{
+		error("class");
 	}
 }
 
@@ -151,18 +193,28 @@ function functions() {
 
 function _function() {
 	if (exigir("void")) {
-		if (exigir(globalTokens[0])) {
+		if (exigirFunctionName(globalTokens[0])) {
 			if (exigir("(")) {
 				if (exigir(")")) {
 					if (exigir("{")) {
 						body();
 						if (!exigir("}")) {
-
+							error("}");
 						}
+					}else{
+						error("{");
 					}
+				}else{
+					error(")");
 				}
+			}else{
+				error("(");
 			}
+		}else{
+			error("valid function name")
 		}
+	}else{
+		error("void");
 	}
 }
 
@@ -179,17 +231,25 @@ function mainFunction() {
 				if (exigir("{")) {
 					body();
 					if (!exigir("}")) {
+						error("}");
 					}
+				}else{
+					error("{");
 				}
+			}else{
+				error(")");
 			}
+		}else{
+			error("(");
 		}
+	}else{
+		error("program");
 	}
 }
 
 function body() {
 	if (verificar("flip")) {
-		if (!exigir("flip")) {
-		}
+		exigir("flip");
 	}
 	else if (verificar("getCard")) {
 		exigir("getCard");
@@ -212,7 +272,7 @@ function body() {
 		customerFunctionExpression();
 	}
 	else {
-		console.log("error");
+		error("expression in body");
 	}
 	bodyAlpha();
 }
@@ -224,11 +284,19 @@ function customerFunctionExpression() {
 				if (exigir("{")) {
 					body();
 					if (!exigir("}")) {
-
+						error("}");
 					}
+				}else{
+					error("{");
 				}
+			}else{
+				error(")");
 			}
+		}else{
+			error("(");
 		}
+	}else{
+		error("valid function name");
 	}
 }
 
@@ -245,34 +313,36 @@ function ifexpression() {
 								if (exigir("{")) {
 									body();
 									if (!exigir("}")) {
-										console.log("error");
+										error("}");
 									}
+								}else{
+									error("{");
 								}
 							}
 							else {
-								console.log("error");
+								error("else");
 							}
 						}
 					}
 					else {
-						console.log("error");
+						error("}");
 					}
 				}
 				else {
-					console.log("error");
+					error("{");
 				}
 
 			}
 			else {
-				console.log("error");
+				error(")");
 			}
 		}
 		else {
-			console.log("error");
+			error("(");
 		}
 	}
 	else {
-		console.log("error");
+		error("if")
 	}
 }
 
@@ -280,14 +350,23 @@ function whileExpression() {
 	if (exigir("while")) {
 		if (exigir("(")) {
 			conditional();
-			if (!exigir(")")) {
-				console.log("error");
+			if (exigir(")")) {
+				if(exigir("{")){
+					body();
+					if(!exigir("}")){
+						error("}");
+					}
+				}else{
+					error("{");
+				}
+			}else{
+				error(")");
 			}
 		} else {
-			console.log("error");
+			error("(");
 		}
 	} else {
-		console.log("error");
+		error("while");
 	}
 }
 
@@ -304,7 +383,11 @@ function iterateExpression() {
 					}
 				}
 			}
+		}else{
+			error("(");
 		}
+	}else{
+		error("iterate");
 	}
 }
 
@@ -420,6 +503,7 @@ function operator() {
 function exigir(token) {
 	if (token === globalTokens[0]) {
 		globalTokens.splice(0, 1);
+		currentToken++;
 		return true;
 	}
 	return false;
@@ -432,6 +516,7 @@ function verificar(token) {
 function exigirFunctionName(token) {
 	if (token.match(/^[a-z]+$/i)) {
 		globalTokens.splice(0, 1);
+		currentToken++;
 		return true;
 	}
 	return false;
@@ -444,6 +529,7 @@ function verificarFunctionName(token) {
 function exigirNumero(token) {
 	if (token.match(/^[0-9]+$/)) {
 		globalTokens.splice(0, 1);
+		currentToken++;
 		return true;
 	}
 	return false;
