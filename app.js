@@ -319,7 +319,7 @@ function ifexpression() {
 		stack.push(i++);
 		if (exigir("(")) {
 			conditional();
-			int[i++] = JMP;
+			codIntermedio[i++] = JMP;
 			if (exigir(")")) {
 				if (exigir("{")) {
 					stack.push(i++);
