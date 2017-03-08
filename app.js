@@ -38,14 +38,14 @@ var TokensLine = [];
 var currentToken;
 var correctCode;
 
-var IF = 0;
-var WHILE = 1;
-var ITERATE = 2;
-var RETURN = 3;
-var INICIOPROG = 4;
-var FIN = 5;
-var JMP = 6;
-var CALL = 7;
+var IF = -1;
+var WHILE = -2;
+var ITERATE = -3;
+var RETURN = -4;
+var INICIOPROG = -5;
+var FIN = -6;
+var JMP = -7;
+var CALL = -8;
 
 var codIntermedio = [];
 var stack = [];
