@@ -334,7 +334,6 @@ function ifexpression() {
 									if (!exigir("}")) {
 										error("}");
 									}
-									console.log(codIntermedio);
 								} else {
 									error("{");
 								}
@@ -343,6 +342,8 @@ function ifexpression() {
 								error("else");
 							}
 						}
+
+						console.log(codIntermedio);
 					}
 					else {
 						error("}");
