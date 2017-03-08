@@ -316,7 +316,6 @@ function customerFunctionExpression() {
 function ifexpression() {
 	if (exigir("if")) {
 		codIntermedio[i++] = IF;
-		//stack.push(i++);
 		if (exigir("(")) {
 			conditional();
 			codIntermedio[i++] = JMP;
@@ -325,11 +324,14 @@ function ifexpression() {
 					stack.push(i++);
 					body();
 					if (exigir("}")) {
+
+						codIntermedio[i++]=JMP;
+						codIntermedio[stack.pop()]=i+1;
+						stack.push(i++);
+
 						if (verificar("else")) {
 							if (exigir("else")) {
 								if (exigir("{")) {
-									codIntermedio[stack.pop()] = i + 2;
-									codIntermedio[i++] = JMP;
 									body();
 									if (!exigir("}")) {
 										error("}");
@@ -342,6 +344,8 @@ function ifexpression() {
 								error("else");
 							}
 						}
+
+						codIntermedio[stack.pop()]=i;
 
 						console.log(codIntermedio);
 					}
