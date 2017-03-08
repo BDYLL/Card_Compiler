@@ -316,7 +316,7 @@ function customerFunctionExpression() {
 function ifexpression() {
 	if (exigir("if")) {
 		codIntermedio[i++] = IF;
-		stack.push(i++);
+		//stack.push(i++);
 		if (exigir("(")) {
 			conditional();
 			codIntermedio[i++] = JMP;
@@ -369,7 +369,7 @@ function ifexpression() {
 
 function whileExpression() {
 	if (exigir("while")) {
-		codIntermedio[i++] = WHILE;
+		codIntermedio[i] = WHILE;
 		stack.push(i++);
 		if (exigir("(")) {
 			conditional();
