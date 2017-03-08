@@ -38,6 +38,15 @@ var TokensLine = [];
 var currentToken;
 var correctCode;
 
+var IF = 0;
+var WHILE = 1;
+var ITERATE = 2;
+var RETURN = 3;
+var INICIOPROG = 4;
+var FIN = 5;
+var JMP = 6;
+var CALL = 7;
+
 function testText() {
 	var code = document.getElementById("codeArea").value;
 	checkCode(code);
