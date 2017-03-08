@@ -378,7 +378,7 @@ function whileExpression() {
 					codIntermedio[i++] = JMP;
 					stack.push(i++);
 					body();
-					codIntermedio[pop()] = i + 2;
+					codIntermedio[stack.pop()] = i + 2;
 					codIntermedio[i++] = JMP;
 					codIntermedio[i++] = stack.pop();
 					if (!exigir("}")) {
