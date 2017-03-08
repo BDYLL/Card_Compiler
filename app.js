@@ -47,6 +47,10 @@ var FIN = 5;
 var JMP = 6;
 var CALL = 7;
 
+var codIntermedio = [];
+var stack = [];
+var i = 0;
+
 function testText() {
 	var code = document.getElementById("codeArea").value;
 	checkCode(code);
@@ -91,7 +95,7 @@ function checkCode(code) {
 		correctCode = true;
 		currentToken = 0;
 		program();
-		if(correctCode){
+		if (correctCode) {
 			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br><br>";
 			document.getElementById("consoleText").innerHTML += consoleMessage;
 		}
@@ -116,12 +120,12 @@ function getRow(code, token) {
 	console.log("yu wut m8");
 	return -1;
 }
-function getRowsPerToken(code){
+function getRowsPerToken(code) {
 	TokensLine = [];
 	let tmpStr;
 	let rowTokens;
 	let codeInRows = code.split("\n");
-	for(let i = 0; i < codeInRows.length; i++){
+	for (let i = 0; i < codeInRows.length; i++) {
 		rowTokens = [];
 		tmpStr = codeInRows[i];
 		tmpStr = tmpStr.replace(/\{/g, " { ");
@@ -136,8 +140,8 @@ function getRowsPerToken(code){
 		tmpStr = tmpStr.replace(/\!\=/g, " != ");
 		rowTokens = tmpStr.replace(/[\n\r\t]/g, " ").split(" ");
 		rowTokens = rowTokens.filter(e => e !== "");
-		for(let j = 0; j < rowTokens.length; j++){
-			TokensLine.push(i+1);
+		for (let j = 0; j < rowTokens.length; j++) {
+			TokensLine.push(i + 1);
 
 		}
 
@@ -167,9 +171,9 @@ function checkToken(token) {
 }
 
 function error(expected) {
-	console.log("Error in Line " + TokensLine[currentToken] +". Expected '"+ expected +"' instead of '" + globalTokens[0] + "'.");
+	console.log("Error in Line " + TokensLine[currentToken] + ". Expected '" + expected + "' instead of '" + globalTokens[0] + "'.");
 	correctCode = false;
-	consoleMessage = "<span class=\"consoleError\"> Error in Line "+ TokensLine[currentToken] +". Expected "+expected+" instead of '" + globalTokens[0]   +"'. </span><br><br>";
+	consoleMessage = "<span class=\"consoleError\"> Error in Line " + TokensLine[currentToken] + ". Expected " + expected + " instead of '" + globalTokens[0] + "'. </span><br><br>";
 	document.getElementById("consoleText").innerHTML += consoleMessage;
 }
 
@@ -182,13 +186,13 @@ function program() {
 				if (!exigir("}")) {
 					error("}");
 				}
-			}else{
+			} else {
 				error("{");
 			}
-		}else{
+		} else {
 			error("program");
 		}
-	}else{
+	} else {
 		error("class");
 	}
 }
@@ -210,19 +214,19 @@ function _function() {
 						if (!exigir("}")) {
 							error("}");
 						}
-					}else{
+					} else {
 						error("{");
 					}
-				}else{
+				} else {
 					error(")");
 				}
-			}else{
+			} else {
 				error("(");
 			}
-		}else{
+		} else {
 			error("valid function name")
 		}
-	}else{
+	} else {
 		error("void");
 	}
 }
@@ -242,16 +246,16 @@ function mainFunction() {
 					if (!exigir("}")) {
 						error("}");
 					}
-				}else{
+				} else {
 					error("{");
 				}
-			}else{
+			} else {
 				error(")");
 			}
-		}else{
+		} else {
 			error("(");
 		}
-	}else{
+	} else {
 		error("program");
 	}
 }
@@ -295,36 +299,43 @@ function customerFunctionExpression() {
 					if (!exigir("}")) {
 						error("}");
 					}
-				}else{
+				} else {
 					error("{");
 				}
-			}else{
+			} else {
 				error(")");
 			}
-		}else{
+		} else {
 			error("(");
 		}
-	}else{
+	} else {
 		error("valid function name");
 	}
 }
 
 function ifexpression() {
 	if (exigir("if")) {
+		codIntermedio[i++] = IF;
+		stack.push(i++);
 		if (exigir("(")) {
 			conditional();
+			int[i++] = JMP;
 			if (exigir(")")) {
 				if (exigir("{")) {
+					stack.push(i++);
 					body();
 					if (exigir("}")) {
 						if (verificar("else")) {
 							if (exigir("else")) {
 								if (exigir("{")) {
+									codIntermedio[stack.pop()] = i + 2;
+									codIntermedio[i++] = JMP;
 									body();
 									if (!exigir("}")) {
 										error("}");
 									}
-								}else{
+									console.log(codIntermedio);
+								} else {
 									error("{");
 								}
 							}
@@ -357,18 +368,27 @@ function ifexpression() {
 
 function whileExpression() {
 	if (exigir("while")) {
+		codIntermedio[i++] = WHILE;
+		stack.push(i++);
 		if (exigir("(")) {
 			conditional();
+			//codIntermedio[i++] = 255;
 			if (exigir(")")) {
-				if(exigir("{")){
+				if (exigir("{")) {
+					codIntermedio[i++] = JMP;
+					stack.push(i++);
 					body();
-					if(!exigir("}")){
+					codIntermedio[pop()] = i + 2;
+					codIntermedio[i++] = JMP;
+					codIntermedio[i++] = stack.pop();
+					if (!exigir("}")) {
 						error("}");
 					}
-				}else{
+					console.log(codIntermedio);
+				} else {
 					error("{");
 				}
-			}else{
+			} else {
 				error(")");
 			}
 		} else {
@@ -389,19 +409,19 @@ function iterateExpression() {
 						if (!exigir("}")) {
 							error("}");
 						}
-					}else{
+					} else {
 						error("{");
 					}
-				}else{
+				} else {
 					error(")");
 				}
-			}else{
+			} else {
 				error("valid number");
 			}
-		}else{
+		} else {
 			error("(");
 		}
-	}else{
+	} else {
 		error("iterate");
 	}
 }
@@ -412,10 +432,10 @@ function callFunction() {
 			if (!exigir(")")) {
 				error(")");
 			}
-		}else{
+		} else {
 			error("Valid number");
 		}
-	}else{
+	} else {
 		error("(");
 	}
 }
