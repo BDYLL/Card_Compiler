@@ -580,6 +580,7 @@ function verificarFunctionName(token) {
 
 function exigirNumero(token) {
 	if (token.match(/^[0-9]+$/)) {
+		codIntermedio[i++]=Number(token);
 		globalTokens.splice(0, 1);
 		currentToken++;
 		return true;
