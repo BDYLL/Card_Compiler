@@ -79,6 +79,10 @@ var codIntermedio = [];
 var stack = [];
 var i = 0;
 
+var funcTable=[];
+
+var nextFunction=-33;
+
 function testText() {
 	var code = document.getElementById("codeArea").value;
 	checkCode(code);
@@ -234,7 +238,17 @@ function functions() {
 
 function _function() {
 	if (exigir("void")) {
+		var tmpStr=globalTokens[0];
 		if (exigirFunctionName(globalTokens[0])) {
+            codIntermedio[i]=nextFunction;
+			var newFunc={
+				name:tmpStr,
+				index:i,
+				functionNumber:nextFunction
+			}
+			i++;
+			nextFunction--;
+			funcTable.push(newFunc);
 			if (exigir("(")) {
 				if (exigir(")")) {
 					if (exigir("{")) {
@@ -242,6 +256,7 @@ function _function() {
 						if (!exigir("}")) {
 							error("}");
 						}
+						codIntermedio[i++]=RETURN;
 					} else {
 						error("{");
 					}
@@ -313,12 +328,30 @@ function body() {
 		iterateExpression();
 	}
 	else if (verificarFunctionName(globalTokens[0])) {
+		var functionName =globalTokens[0];
 		exigirFunctionName(globalTokens[0]);
+
+		callCustomerFunction(functionName);
 	}
 	else {
 		error("expression in body");
 	}
 	bodyAlpha();
+}
+
+function callCustomerFunction(functionName){
+
+	var theFunc = funcTable.filter(f=>f.name===functionName);
+
+	var funcPosition = theFunc[0].index;
+
+	codIntermedio[i++]=JMP;
+	codIntermedio[i++]=funcPosition;
+
+	console.log("start");
+	codIntermedio.forEach(s=>console.log(s));
+	console.log("end");
+
 }
 
 function customerFunctionExpression() {
