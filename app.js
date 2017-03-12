@@ -437,14 +437,22 @@ function whileExpression() {
 
 function iterateExpression() {
 	if (exigir("iterate")) {
+		codIntermedio[i]=ITERATE;
+		stack.push(i++);
 		if (exigir("(")) {
 			if (exigirNumero(globalTokens[0])) {
 				if (exigir(")")) {
 					if (exigir("{")) {
+						codIntermedio[i++]=JMP;
+						stack.push(i++);
 						body();
+                        codIntermedio[stack.pop()] = i + 2;
+                        codIntermedio[i++] = JMP;
+                        codIntermedio[i++] = stack.pop();
 						if (!exigir("}")) {
 							error("}");
 						}
+						codIntermedio.forEach(s=>console.log(s));
 					} else {
 						error("{");
 					}
@@ -624,6 +632,7 @@ function verificarFunctionName(token) {
 
 function exigirNumero(token) {
 	if (token.match(/^[0-9]+$/)) {
+		codIntermedio[i++]=Number(token);
 		globalTokens.splice(0, 1);
 		currentToken++;
 		return true;
