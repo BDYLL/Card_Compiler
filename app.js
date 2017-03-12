@@ -46,6 +46,34 @@ var INICIOPROG = -5;
 var FIN = -6;
 var JMP = -7;
 var CALL = -8;
+var FLIP=-9;
+var GETCARD=-10;
+var PUTCARD=-11;
+
+var ISBLACK=-12;
+var ISRED=-28;
+var ISHEART=-13;
+var ISCLUBS=-14;
+var ISDIAMOND=-15;
+var ISSPADES=-16;
+var ISNOTBLACK=-17;
+var ISNOTRED=-29;
+var ISNOTHEART=-18;
+var ISNOTCLUBS=-19;
+var ISNOTDIAMOND=-20;
+var ISNOTSPADES=-21;
+
+var LESSTHAN=-22;
+var GREATERTHAN=-23;
+var LESSOREQUAL=-24;
+var GREATEROREQUAL=-25;
+var EQUAL=-26;
+var DIFFERENT=-27;
+
+var ISEMPTY=-30;
+var ISNOTEMPTY=-31;
+
+var VALUE=-32;
 
 var codIntermedio = [];
 var stack = [];
@@ -263,13 +291,16 @@ function mainFunction() {
 function body() {
 	if (verificar("flip")) {
 		exigir("flip");
+        codIntermedio[i++]=FLIP;
 	}
 	else if (verificar("getCard")) {
 		exigir("getCard");
+        codIntermedio[i++]=GETCARD;
 		callFunction();
 	}
 	else if (verificar("putCard")) {
 		exigir("putCard");
+        codIntermedio[i++]=PUTCARD;
 		callFunction();
 	}
 	else if (verificar("if")) {
@@ -457,13 +488,16 @@ function conditional() {
 		//si entra es correcto y no se hace nada
 	} else if (verificar("VALUE")) {
 		exigir("VALUE");
+        codIntermedio[i++]=VALUE;
 		operator();
 		if (!exigirNumero(globalTokens[0])) { error("valid number"); }
 	} else if (verificar("isEmpty")) {
 		exigir("isEmpty");
+        codIntermedio[i++]=ISEMPTY;
 		callFunction();
 	} else if (verificar("isNotEmpty")) {
 		exigir("isNotEmpty");
+        codIntermedio[i++]=ISNOTEMPTY;
 		callFunction();
 	} else {
 		error("valid conditional");
@@ -472,50 +506,62 @@ function conditional() {
 function simpleCondition() {
 	if (verificar("isRed")) {
 		exigir("isRed");
+		codIntermedio[i++]=ISRED;
 		return true;
 	}
 	else if (verificar("isBlack")) {
 		exigir("isBlack");
+		codIntermedio[i++]=ISBLACK;
 		return true;
 	}
 	else if (verificar("isHeart")) {
 		exigir("isHeart");
+        codIntermedio[i++]=ISHEART;
 		return true;
 	}
 	else if (verificar("isClubs")) {
 		exigir("isClubs");
+        codIntermedio[i++]=ISCLUBS;
 		return true;
 	}
 	else if (verificar("isDiamond")) {
 		exigir("isDiamond");
+        codIntermedio[i++]=ISDIAMOND;
 		return true;
 	}
 	else if (verificar("isSpades")) {
 		exigir("isSpades");
+        codIntermedio[i++]=ISSPADES;
 		return true;
 	}
 	else if (verificar("isNotRed")) {
 		exigir("isNotRed");
+        codIntermedio[i++]=ISNOTRED;
 		return true;
 	}
 	else if (verificar("isNotBlack")) {
 		exigir("isNotBlack");
+        codIntermedio[i++]=ISNOTBLACK;
 		return true;
 	}
 	else if (verificar("isNotHeart")) {
 		exigir("isNotHeart");
+        codIntermedio[i++]=ISNOTHEART;
 		return true;
 	}
 	else if (verificar("isNotClubs")) {
 		exigir("isNotClubs");
+        codIntermedio[i++]=ISNOTCLUBS;
 		return true;
 	}
 	else if (verificar("isNotDiamond")) {
 		exigir("isNotDiamond");
+        codIntermedio[i++]=ISNOTDIAMOND;
 		return true;
 	}
 	else if (verificar("isNotSpades")) {
 		exigir("isNotSpades");
+        codIntermedio[i++]=ISNOTSPADES;
 		return true;
 	} else {
 		return false;
@@ -524,21 +570,27 @@ function simpleCondition() {
 function operator() {
 	if (verificar("<")) {
 		exigir("<");
+        codIntermedio[i++]=LESSTHAN;
 	}
 	else if (verificar(">")) {
 		exigir(">");
+        codIntermedio[i++]=GREATERTHAN;
 	}
 	else if (verificar("<=")) {
 		exigir("<=");
+        codIntermedio[i++]=LESSOREQUAL;
 	}
 	else if (verificar(">=")) {
 		exigir(">=");
+        codIntermedio[i++]=GREATEROREQUAL;
 	}
 	else if (verificar("==")) {
 		exigir("==");
+        codIntermedio[i++]=EQUAL;
 	}
 	else if (verificar("!=")) {
 		exigir("!=");
+        codIntermedio[i++]=DIFFERENT;
 	}
 	else {
 		error("valid operator");
