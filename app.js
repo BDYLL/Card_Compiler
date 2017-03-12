@@ -289,6 +289,7 @@ function mainFunction() {
 					if (!exigir("}")) {
 						error("}");
 					}
+					codIntermedio.forEach(s=>console.log(s));
 				} else {
 					error("{");
 				}
@@ -348,9 +349,6 @@ function callCustomerFunction(functionName){
 	codIntermedio[i++]=JMP;
 	codIntermedio[i++]=funcPosition;
 
-	console.log("start");
-	codIntermedio.forEach(s=>console.log(s));
-	console.log("end");
 
 }
 
@@ -410,8 +408,6 @@ function ifexpression() {
 						}
 
 						codIntermedio[stack.pop()]=i;
-
-						console.log(codIntermedio);
 					}
 					else {
 						error("}");
@@ -453,7 +449,7 @@ function whileExpression() {
 					if (!exigir("}")) {
 						error("}");
 					}
-					console.log(codIntermedio);
+					//console.log(codIntermedio);
 				} else {
 					error("{");
 				}
@@ -485,7 +481,7 @@ function iterateExpression() {
 						if (!exigir("}")) {
 							error("}");
 						}
-						codIntermedio.forEach(s=>console.log(s));
+						//codIntermedio.forEach(s=>console.log(s));
 					} else {
 						error("{");
 					}
