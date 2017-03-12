@@ -406,14 +406,22 @@ function whileExpression() {
 
 function iterateExpression() {
 	if (exigir("iterate")) {
+		codIntermedio[i]=ITERATE;
+		stack.push(i++);
 		if (exigir("(")) {
 			if (exigirNumero(globalTokens[0])) {
 				if (exigir(")")) {
 					if (exigir("{")) {
+						codIntermedio[i++]=JMP;
+						stack.push(i++);
 						body();
+                        codIntermedio[stack.pop()] = i + 2;
+                        codIntermedio[i++] = JMP;
+                        codIntermedio[i++] = stack.pop();
 						if (!exigir("}")) {
 							error("}");
 						}
+						codIntermedio.forEach(s=>console.log(s));
 					} else {
 						error("{");
 					}
