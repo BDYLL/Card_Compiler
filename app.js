@@ -209,6 +209,120 @@ function error(expected) {
 	document.getElementById("consoleText").innerHTML += consoleMessage;
 }
 
+function printIntermediateCode(){
+	var line=0;
+	codIntermedio.forEach(cell=>{
+        switch(cell){
+            case IF:
+                console.log(line+" : "+"IF");
+                break;
+            case WHILE:
+                console.log(line+" : "+"WHILE");
+                break;
+            case ITERATE:
+                console.log(line+" : "+"ITERATE");
+                break;
+            case RETURN:
+                console.log(line+" : "+"RETURN");
+                break;
+            case INICIOPROG:
+                console.log(line+" : "+"INICIOPROG");
+                break;
+            case FIN:
+                console.log(line+" : "+"FIN");
+                break;
+            case JMP:
+                console.log(line+" : "+"JMP");
+                break;
+            case CALL:
+                console.log(line+" : "+"CALL");
+                break;
+            case FLIP:
+                console.log(line+" : "+"FLIP");
+                break;
+            case GETCARD:
+                console.log(line+" : "+"GETCARD");
+                break;
+            case PUTCARD:
+                console.log(line+" : "+"PUTCARD");
+                break;
+            case ISBLACK:
+                console.log(line+" : "+"ISBLACK");
+                break;
+            case ISRED:
+                console.log(line+" : "+"ISRED");
+                break;
+            case ISHEART:
+                console.log(line+" : "+"ISHEART");
+                break;
+            case ISCLUBS:
+                console.log(line+" : "+"ISCLUBS");
+                break;
+            case ISDIAMOND:
+                console.log(line+" : "+"ISDIAMOND");
+                break;
+            case ISSPADES:
+                console.log(line+" : "+"ISSPADES");
+                break;
+            case ISNOTBLACK:
+                console.log(line+" : "+"ISNOTBLACK");
+                break;
+            case ISNOTRED:
+                console.log(line+" : "+"ISNOTRED");
+                break;
+            case ISNOTHEART:
+                console.log(line+" : "+"ISNOTHEART");
+                break;
+            case ISNOTCLUBS:
+                console.log(line+" : "+"ISNOTCLUBS");
+                break;
+            case ISNOTDIAMOND:
+                console.log(line+" : "+"ISNOTDIAMOND");
+                break;
+            case ISNOTSPADES:
+                console.log(line+" : "+"ISNOTSPADES");
+                break;
+            case LESSTHAN:
+                console.log(line+" : "+"LESSTHAN");
+                break;
+            case GREATERTHAN:
+                console.log(line+" : "+"GREATERTHAN");
+                break;
+            case LESSOREQUAL:
+                console.log(line+" : "+"LESSOREQUAL");
+                break;
+            case GREATEROREQUAL:
+                console.log(line+" : "+"GREATEROREQUAL");
+                break;
+            case EQUAL:
+                console.log(line+" : "+"EQUAL");
+                break;
+            case DIFFERENT:
+                console.log(line+" : "+"DIFFERENT");
+                break;
+            case ISEMPTY:
+                console.log(line+" : "+"ISEMPTY");
+                break;
+            case ISNOTEMPTY:
+                console.log(line+" : "+"ISNOTEMPTY");
+                break;
+            case VALUE:
+                console.log(line+" : "+"VALUE");
+                break;
+            default:
+                if(cell<=-33){
+                    console.log(line+" : "+funcTable.filter(f=>f.functionNumber===cell)[0].name);
+                }
+                else{
+                    console.log(line+" : "+cell);
+                }
+                break;
+        }
+        line++;
+
+	});
+}
+
 function program() {
 	if (exigir("class")) {
 		if (exigir("program")) {
@@ -289,7 +403,10 @@ function mainFunction() {
 					if (!exigir("}")) {
 						error("}");
 					}
-					codIntermedio.forEach(s=>console.log(s));
+					//codIntermedio.forEach(s=>console.log(s));
+
+					printIntermediateCode();
+
 				} else {
 					error("{");
 				}
