@@ -88,6 +88,10 @@ function testText() {
 	checkCode(code);
 }
 
+function clearText(){
+	document.getElementById("consoleText").innerHTML = "";
+	document.getElementById("consoleText").innerHTML = "Esta es la consola, donde apareceran errores en el codigo al momento de ejecutarse: <br>";
+}
 
 function checkCode(code) {
 	var correct = true;
@@ -141,6 +145,7 @@ function checkCode(code) {
 		document.getElementById("consoleText").innerHTML += consoleMessage;
 	}
 }
+
 function getRow(code, token) {
 	let codeInRows = code.split("\n");
 	for (i = 0; i < codeInRows.length; i++) {
