@@ -85,6 +85,13 @@ var nextFunction=-33;
 
 function testText() {
 	var code = document.getElementById("codeArea").value;
+	codIntermedio=[];
+	stack=[];
+	i=0;
+	funcTable=[];
+	nextFunction=-33;
+	globalTokens=[];
+	TokensLine=[];
 	checkCode(code);
 }
 
