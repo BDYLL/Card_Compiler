@@ -558,6 +558,7 @@ function callCustomerFunction(functionName){
 	codIntermedio[i++]=funcPosition;
 }
 
+/*
 function customerFunctionExpression() {
 	if (exigirFunctionName(globalTokens[0])) {
 		if (exigir("(")) {
@@ -580,6 +581,7 @@ function customerFunctionExpression() {
 		error("valid function name");
 	}
 }
+*/
 
 function ifExpression() {
 	demand("if");
@@ -604,6 +606,7 @@ function ifExpression() {
     codIntermedio[stack.pop()]=i;
 }
 
+/*
 function ifexpression() {
 	if (exigir("if")) {
 		codIntermedio[i++] = IF;
@@ -659,6 +662,7 @@ function ifexpression() {
 		error("if")
 	}
 }
+*/
 
 function whileExpression(){
 	demand("while");
@@ -717,7 +721,7 @@ function iterateExpression(){
     stack.push(i++);
     demand("(");
     demandNumber();
-    demand(")")
+    demand(")");
     demand("{");
     codIntermedio[i++]=JMP;
     stack.push(i++);
@@ -940,7 +944,7 @@ function operator() {
     }
 }
 
-
+/*
 function exigir(token) {
 	if (token === globalTokens[0]) {
 		globalTokens.splice(0, 1);
@@ -948,7 +952,7 @@ function exigir(token) {
 		return true;
 	}
 	return false;
-}
+}*/
 
 function demand(token){
 	if(globalTokens.length===0){
@@ -1003,10 +1007,11 @@ function checkFunctionName() {
 	return globalTokens[0].match(/^[a-z]+$/i);
 }
 
-
+/*
 function verificar(token) {
 	return token === globalTokens[0];
 }
+
 
 function exigirFunctionName(token) {
 	if (token.match(/^[a-z]+$/i)) {
@@ -1035,6 +1040,7 @@ function verificarNumero(token) {
 	return token.match(/^[0-9]+$/);
 }
 
+*/
 $(function () {
 	$(".lined").linedtextarea({
 		selectedLine: 1
