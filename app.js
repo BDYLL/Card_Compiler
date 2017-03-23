@@ -940,6 +940,7 @@ function operator() {
         codIntermedio[i++]=DIFFERENT;
 	}
 	else {
+		error("valid operator");
         throw {name:"SyntaxException",message:"invalid operator"};
     }
 }
@@ -956,6 +957,7 @@ function exigir(token) {
 
 function demand(token){
 	if(globalTokens.length===0){
+        error(token);
 		throw {name:"SyntaxException",message:"empty globalTokens"};
 	}
 	if(token===globalTokens[0]){
@@ -969,8 +971,10 @@ function demand(token){
 }
 
 function demandFunctionName() {
-	if(globalTokens.length===0)
-    	throw {name:"SyntaxException",message:"empty globalTokens"};
+	if(globalTokens.length===0) {
+        error("valid function name");
+        throw {name: "SyntaxException", message: "empty globalTokens"};
+    }
 	let token = globalTokens[0];
 	if(!token.match(/^[a-z]+$/i)){
 		error("valid function name");
@@ -982,8 +986,10 @@ function demandFunctionName() {
 }
 
 function demandNumber() {
-	if(globalTokens.length===0)
-        throw {name:"SyntaxException",message:"empty globalTokens"};
+	if(globalTokens.length===0) {
+		error("valid number");
+        throw {name: "SyntaxException", message: "empty globalTokens"};
+    }
 	let number = globalTokens[0];
 	if(!number.match(/^[0-9]+$/)){
 		error("valid number");
