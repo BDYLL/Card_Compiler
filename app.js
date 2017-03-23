@@ -137,7 +137,18 @@ function checkCode(code) {
 		console.log("El código es correcto!");
 		correctCode = true;
 		currentToken = 0;
-		program();
+
+		try {
+            program();
+        }
+        catch(err){
+			if(err.name==="SyntaxException"){
+
+			}
+			else{
+				throw err;
+			}
+		}
 		if (correctCode) {
 			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br><br>";
 			document.getElementById("consoleText").innerHTML += consoleMessage;
@@ -335,7 +346,7 @@ function printIntermediateCode(){
 	});
 }
 
-function program() {
+/*function program() {
 	if (exigir("class")) {
 		if (exigir("program")) {
 			if (exigir("{")) {
@@ -353,15 +364,33 @@ function program() {
 	} else {
 		error("class");
 	}
+}*/
+
+function program() {
+	demand("class");
+	demand("program");
+	demand("{");
+	functions();
+	mainFunction();
+	demand("}");
 }
 
+/*
 function functions() {
 	if (verificar("void")) {
 		_function();
 		functionAlpha();
 	}
+}*/
+
+function functions() {
+	if(check("void")){
+		_function();
+		functionAlpha();
+	}
 }
 
+/*
 function _function() {
 	if (exigir("void")) {
 		var tmpStr=globalTokens[0];
@@ -398,14 +427,43 @@ function _function() {
 	} else {
 		error("void");
 	}
+}*/
+
+function _function() {
+	demand("void");
+	let funcName = demandFunctionName();
+	codIntermedio[i]=nextFunction;
+	let newFunc={
+		name:funcName,
+		index:i,
+		functionNumber:nextFunction
+	}
+	i++;
+	nextFunction--;
+	funcTable.push(newFunc);
+	demand("(");
+	demand(")");
+	demand("{");
+	body();
+	demand("}");
+    codIntermedio[i++]=RETURN;
 }
 
+/*
 function functionAlpha() {
 	if (verificar("void")) {
 		functions();
 	}
 }
+*/
 
+function functionAlpha() {
+	if(check("void")){
+		functions();
+	}
+}
+
+/*
 function mainFunction() {
 	if (exigir("program")) {
 		if (exigir("(")) {
@@ -431,54 +489,58 @@ function mainFunction() {
 	} else {
 		error("program");
 	}
+}*/
+
+function mainFunction(){
+	demand("program");
+	demand("(");
+	demand(")");
+	demand("{");
+	body();
+	demand("}");
+	printIntermediateCode();
 }
 
 function body() {
-	if (verificar("flip")) {
+	if (check("flip")) {
 		exigir("flip");
         codIntermedio[i++]=FLIP;
 	}
-	else if (verificar("getCard")) {
+	else if (check("getCard")) {
 		exigir("getCard");
         codIntermedio[i++]=GETCARD;
 		callFunction();
 	}
-	else if (verificar("putCard")) {
+	else if (check("putCard")) {
 		exigir("putCard");
         codIntermedio[i++]=PUTCARD;
 		callFunction();
 	}
-	else if (verificar("if")) {
-		ifexpression();
+	else if (check("if")) {
+		ifExpression();
 	}
-	else if (verificar("while")) {
+	else if (check("while")) {
 		whileExpression();
 	}
-	else if (verificar("iterate")) {
+	else if (check("iterate")) {
 		iterateExpression();
 	}
-	else if (verificarFunctionName(globalTokens[0])) {
-		var functionName =globalTokens[0];
-		exigirFunctionName(globalTokens[0]);
-
+	else if (checkFunctionName()) {
+		let functionName = demandFunctionName();
 		callCustomerFunction(functionName);
 	}
 	else {
-		error("expression in body");
+		//error("expression in body");
+        throw {name:"SyntaxException",message:"invalid body"};
 	}
 	bodyAlpha();
 }
 
 function callCustomerFunction(functionName){
-
-	var theFunc = funcTable.filter(f=>f.name===functionName);
-
-	var funcPosition = theFunc[0].index;
-
+	let theFunc = funcTable.filter(f=>f.name===functionName);
+	let funcPosition = theFunc[0].index;
 	codIntermedio[i++]=JMP;
 	codIntermedio[i++]=funcPosition;
-
-
 }
 
 function customerFunctionExpression() {
@@ -502,6 +564,29 @@ function customerFunctionExpression() {
 	} else {
 		error("valid function name");
 	}
+}
+
+function ifExpression() {
+	demand("if");
+    codIntermedio[i++] = IF;
+    demand("(");
+    conditional();
+    codIntermedio[i++] = JMP;
+    demand(")");
+    demand("{");
+    stack.push(i++);
+    body();
+    demand("}");
+    codIntermedio[i++]=JMP;
+    codIntermedio[stack.pop()]=i+1;
+    stack.push(i++);
+    if(check("else")){
+    	demand("else");
+    	demand("{");
+    	body();
+    	demand("}");
+	}
+    codIntermedio[stack.pop()]=i;
 }
 
 function ifexpression() {
@@ -560,6 +645,23 @@ function ifexpression() {
 	}
 }
 
+function whileExpression(){
+	demand("while");
+    codIntermedio[i] = WHILE;
+    stack.push(i++);
+    demand("(");
+    conditional();
+    demand(")");
+    demand("{");
+    codIntermedio[i++] = JMP;
+    stack.push(i++);
+    body();
+    codIntermedio[stack.pop()] = i + 2;
+    codIntermedio[i++] = JMP;
+    codIntermedio[i++] = stack.pop();
+    demand("}");
+}
+/*
 function whileExpression() {
 	if (exigir("while")) {
 		codIntermedio[i] = WHILE;
@@ -592,7 +694,25 @@ function whileExpression() {
 		error("while");
 	}
 }
+*/
 
+function iterateExpression(){
+	demand("iterate");
+    codIntermedio[i]=ITERATE;
+    stack.push(i++);
+    demand("(");
+    demandNumber();
+    demand("{");
+    codIntermedio[i++]=JMP;
+    stack.push(i++);
+    body();
+    codIntermedio[stack.pop()] = i + 2;
+    codIntermedio[i++] = JMP;
+    codIntermedio[i++] = stack.pop();
+    demand("}");
+}
+
+/*
 function iterateExpression() {
 	if (exigir("iterate")) {
 		codIntermedio[i]=ITERATE;
@@ -627,7 +747,15 @@ function iterateExpression() {
 		error("iterate");
 	}
 }
+*/
 
+function callFunction() {
+	demand("(");
+	demandNumber();
+	demand(")");
+}
+
+/*
 function callFunction() {
 	if (exigir("(")) {
 		if (exigirNumero(globalTokens[0])) {
@@ -641,14 +769,23 @@ function callFunction() {
 		error("(");
 	}
 }
+*/
 
+/*
 function bodyAlpha() {
 	if (verificarFunctionName(globalTokens[0])) {
 		body();
 	}
+}*/
+
+function bodyAlpha(){
+	if(checkFunctionName())
+		body();
 }
 
+
 //conditional
+/*
 function conditional() {
 	if (simpleCondition()) {
 		//si entra es correcto y no se hace nada
@@ -668,65 +805,88 @@ function conditional() {
 	} else {
 		error("valid conditional");
 	}
+}*/
+
+function conditional(){
+	if(simpleCondition()){
+
+	} else if (check("VALUE")) {
+        demand("VALUE");
+        codIntermedio[i++]=VALUE;
+        operator();
+		demandNumber();
+    } else if (check("isEmpty")) {
+        demand("isEmpty");
+        codIntermedio[i++]=ISEMPTY;
+        callFunction();
+    } else if (check("isNotEmpty")) {
+        demand("isNotEmpty");
+        codIntermedio[i++]=ISNOTEMPTY;
+        callFunction();
+    } else {
+        throw {name:"SyntaxException",message:"invalid condition"};
+    }
+
 }
+
 function simpleCondition() {
-	if (verificar("isRed")) {
-		exigir("isRed");
+	if (check("isRed")) {
+		demand("isRed");
 		codIntermedio[i++]=ISRED;
 		return true;
 	}
-	else if (verificar("isBlack")) {
-		exigir("isBlack");
+	else if (check("isBlack")) {
+		demand("isBlack");
 		codIntermedio[i++]=ISBLACK;
 		return true;
 	}
-	else if (verificar("isHeart")) {
-		exigir("isHeart");
+	else if (check("isHeart")) {
+		demand("isHeart");
         codIntermedio[i++]=ISHEART;
 		return true;
 	}
-	else if (verificar("isClubs")) {
-		exigir("isClubs");
+	else if (check("isClubs")) {
+		demand("isClubs");
         codIntermedio[i++]=ISCLUBS;
 		return true;
 	}
-	else if (verificar("isDiamond")) {
-		exigir("isDiamond");
+	else if (check("isDiamond")) {
+		demand("isDiamond");
         codIntermedio[i++]=ISDIAMOND;
 		return true;
 	}
-	else if (verificar("isSpades")) {
-		exigir("isSpades");
+	else if (check("isSpades")) {
+		demand("isSpades");
         codIntermedio[i++]=ISSPADES;
 		return true;
 	}
-	else if (verificar("isNotRed")) {
-		exigir("isNotRed");
+	else if (check("isNotRed")) {
+		demand("isNotRed");
         codIntermedio[i++]=ISNOTRED;
 		return true;
 	}
-	else if (verificar("isNotBlack")) {
-		exigir("isNotBlack");
+	else if (check("isNotBlack")) {
+		demand("isNotBlack");
         codIntermedio[i++]=ISNOTBLACK;
 		return true;
 	}
-	else if (verificar("isNotHeart")) {
-		exigir("isNotHeart");
+	else if (check("isNotHeart")) {
+		demand("isNotHeart");
         codIntermedio[i++]=ISNOTHEART;
 		return true;
 	}
-	else if (verificar("isNotClubs")) {
-		exigir("isNotClubs");
+	else if (check("isNotClubs")) {
+		demand("isNotClubs");
         codIntermedio[i++]=ISNOTCLUBS;
 		return true;
 	}
-	else if (verificar("isNotDiamond")) {
-		exigir("isNotDiamond");
+	else if (check("isNotDiamond")) {
+		demand("isNotDiamond");
         codIntermedio[i++]=ISNOTDIAMOND;
 		return true;
 	}
-	else if (verificar("isNotSpades")) {
-		exigir("isNotSpades");
+	else if (check("isNotSpades")) {
+		demand("isNotSpades");
         codIntermedio[i++]=ISNOTSPADES;
 		return true;
 	} else {
@@ -734,34 +894,36 @@ function simpleCondition() {
 	}
 }
 function operator() {
-	if (verificar("<")) {
-		exigir("<");
+	if (check("<")) {
+		demand("<");
         codIntermedio[i++]=LESSTHAN;
 	}
-	else if (verificar(">")) {
-		exigir(">");
+	else if (check(">")) {
+		demand(">");
         codIntermedio[i++]=GREATERTHAN;
 	}
-	else if (verificar("<=")) {
-		exigir("<=");
+	else if (check("<=")) {
+		demand("<=");
         codIntermedio[i++]=LESSOREQUAL;
 	}
-	else if (verificar(">=")) {
-		exigir(">=");
+	else if (check(">=")) {
+		demand(">=");
         codIntermedio[i++]=GREATEROREQUAL;
 	}
-	else if (verificar("==")) {
-		exigir("==");
+	else if (check("==")) {
+		demand("==");
         codIntermedio[i++]=EQUAL;
 	}
-	else if (verificar("!=")) {
-		exigir("!=");
+	else if (check("!=")) {
+		demand("!=");
         codIntermedio[i++]=DIFFERENT;
 	}
 	else {
-		error("valid operator");
-	}
+        throw {name:"SyntaxException",message:"invalid operator"};
+    }
 }
+
+
 function exigir(token) {
 	if (token === globalTokens[0]) {
 		globalTokens.splice(0, 1);
@@ -770,6 +932,60 @@ function exigir(token) {
 	}
 	return false;
 }
+
+function demand(token){
+	if(globalTokens.length===0){
+		throw {name:"SyntaxException",message:"empty globalTokens"};
+	}
+	if(token===globalTokens[0]){
+		globalTokens.splice(0,1);
+		currentToken++;
+	}
+	else{
+		error(token);
+		throw {name:"SyntaxException",message:"expected : "+token+" found : "+globalTokens[0]+" instead"};
+	}
+}
+
+function demandFunctionName() {
+	if(globalTokens.length===0)
+    	throw {name:"SyntaxException",message:"empty globalTokens"};
+	let token = globalTokens[0];
+	if(!token.match(/^[a-z]+$/i)){
+		error("valid function name");
+        throw {name:"SyntaxException",message:"expected valid function name, found : "+token+" instead"};
+    }
+    globalTokens.splice(0,1);
+    currentToken++;
+	return token;
+}
+
+function demandNumber() {
+	if(globalTokens.length===0)
+        throw {name:"SyntaxException",message:"empty globalTokens"};
+	let number = globalTokens[0];
+	if(!number.match(/^[0-9]+$/)){
+		error("valid number")
+        throw {name:"SyntaxException",message:"expected valid number, found : "+number+" instead"};
+	}
+    globalTokens.splice(0,1);
+    codIntermedio[i++]=Number(number);
+	currentToken++;
+	return number;
+}
+
+function check(token){
+	if(globalTokens.length===0)
+		return false;
+	return globalTokens[0]===token;
+}
+
+function checkFunctionName() {
+	if(globalTokens.length===0)
+		return false;
+	return globalTokens[0].match(/^[a-z]+$/i);
+}
+
 
 function verificar(token) {
 	return token === globalTokens[0];
