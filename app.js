@@ -531,6 +531,7 @@ function body() {
 	}
 	else {
 		//error("expression in body");
+		error("invalid body");
         throw {name:"SyntaxException",message:"invalid body"};
 	}
 	bodyAlpha();
