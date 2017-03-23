@@ -432,6 +432,12 @@ function _function() {
 function _function() {
 	demand("void");
 	let funcName = demandFunctionName();
+
+	if(palabras.indexOf(funcName)>=0){
+	    error("not reserved word");
+        throw {name:"SyntaxException",message:funcName+" is a reserved keyword"};
+    }
+
 	codIntermedio[i]=nextFunction;
 	let newFunc={
 		name:funcName,
@@ -503,16 +509,16 @@ function mainFunction(){
 
 function body() {
 	if (check("flip")) {
-		exigir("flip");
+		demand("flip");
         codIntermedio[i++]=FLIP;
 	}
 	else if (check("getCard")) {
-		exigir("getCard");
+		demand("getCard");
         codIntermedio[i++]=GETCARD;
 		callFunction();
 	}
 	else if (check("putCard")) {
-		exigir("putCard");
+		demand("putCard");
         codIntermedio[i++]=PUTCARD;
 		callFunction();
 	}
@@ -539,6 +545,13 @@ function body() {
 
 function callCustomerFunction(functionName){
 	let theFunc = funcTable.filter(f=>f.name===functionName);
+
+	if(theFunc.length===0){
+	    globalTokens[0]=functionName;
+	    error("declared function");
+        throw {name:"SyntaxException",message:functionName+" not declared"};
+    }
+
 	let funcPosition = theFunc[0].index;
 	codIntermedio[i++]=JMP;
 	codIntermedio[i++]=funcPosition;
@@ -703,6 +716,7 @@ function iterateExpression(){
     stack.push(i++);
     demand("(");
     demandNumber();
+    demand(")")
     demand("{");
     codIntermedio[i++]=JMP;
     stack.push(i++);
@@ -825,6 +839,7 @@ function conditional(){
         codIntermedio[i++]=ISNOTEMPTY;
         callFunction();
     } else {
+	    error("valid condition");
         throw {name:"SyntaxException",message:"invalid condition"};
     }
 
