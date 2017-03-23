@@ -434,7 +434,8 @@ function _function() {
 	let funcName = demandFunctionName();
 
 	if(palabras.indexOf(funcName)>=0){
-	    error("not reserved word");
+	    globalTokens[0]=funcName;
+	    error("not reserved word valid function name");
         throw {name:"SyntaxException",message:funcName+" is a reserved keyword"};
     }
 
