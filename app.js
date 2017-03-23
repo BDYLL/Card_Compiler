@@ -1,4 +1,4 @@
-var palabras = [
+const palabras = [
 	"class",
 	"program",
 	"void",
@@ -33,58 +33,58 @@ var palabras = [
 	"==",
 	"!="];
 
-var globalTokens = [];
-var TokensLine = [];
-var currentToken;
-var correctCode;
+let globalTokens = [];
+let TokensLine = [];
+let currentToken;
+let correctCode;
 
-var IF = -1;
-var WHILE = -2;
-var ITERATE = -3;
-var RETURN = -4;
-var INICIOPROG = -5;
-var FIN = -6;
-var JMP = -7;
-var CALL = -8;
-var FLIP=-9;
-var GETCARD=-10;
-var PUTCARD=-11;
+const IF = -1;
+const WHILE = -2;
+const ITERATE = -3;
+const RETURN = -4;
+const INICIOPROG = -5;
+const FIN = -6;
+const JMP = -7;
+const CALL = -8;
+const FLIP=-9;
+const GETCARD=-10;
+const PUTCARD=-11;
 
-var ISBLACK=-12;
-var ISRED=-28;
-var ISHEART=-13;
-var ISCLUBS=-14;
-var ISDIAMOND=-15;
-var ISSPADES=-16;
-var ISNOTBLACK=-17;
-var ISNOTRED=-29;
-var ISNOTHEART=-18;
-var ISNOTCLUBS=-19;
-var ISNOTDIAMOND=-20;
-var ISNOTSPADES=-21;
+const ISBLACK=-12;
+const ISRED=-28;
+const ISHEART=-13;
+const ISCLUBS=-14;
+const ISDIAMOND=-15;
+const ISSPADES=-16;
+const ISNOTBLACK=-17;
+const ISNOTRED=-29;
+const ISNOTHEART=-18;
+const ISNOTCLUBS=-19;
+const ISNOTDIAMOND=-20;
+const ISNOTSPADES=-21;
 
-var LESSTHAN=-22;
-var GREATERTHAN=-23;
-var LESSOREQUAL=-24;
-var GREATEROREQUAL=-25;
-var EQUAL=-26;
-var DIFFERENT=-27;
+const LESSTHAN=-22;
+const GREATERTHAN=-23;
+const LESSOREQUAL=-24;
+const GREATEROREQUAL=-25;
+const EQUAL=-26;
+const DIFFERENT=-27;
 
-var ISEMPTY=-30;
-var ISNOTEMPTY=-31;
+const ISEMPTY=-30;
+const ISNOTEMPTY=-31;
 
-var VALUE=-32;
+const VALUE=-32;
 
-var codIntermedio = [];
-var stack = [];
-var i = 0;
+let codIntermedio = [];
+let stack = [];
+let i = 0;
 
-var funcTable=[];
+let funcTable=[];
 
-var nextFunction=-33;
+let nextFunction=-33;
 
 function testText() {
-	var code = document.getElementById("codeArea").value;
+	let code = document.getElementById("codeArea").value;
 	codIntermedio=[];
 	stack=[];
 	i=0;
@@ -101,9 +101,9 @@ function clearText(){
 }
 
 function checkCode(code) {
-	var correct = true;
+	let correct = true;
 
-	var tmpStr = code;
+	let tmpStr = code;
 
 
 	tmpStr = tmpStr.replace(/\{/g, " { ");
@@ -124,7 +124,7 @@ function checkCode(code) {
 
 	globalTokens = globalTokens.filter(e => e !== "");
 	getRowsPerToken(code);
-	var i, j;
+	let i, j;
 	for (i = 0; i < globalTokens.length; i++) {
 		correct = checkToken(globalTokens[i]);
 		if (!correct) {
@@ -203,7 +203,7 @@ function getRowsPerToken(code) {
 	}
 }
 function checkToken(token) {
-	var i;
+	let i;
 
 
 	if (token.match(/^[a-z]+$/i) != null || token.match(/^[0-9]+$/) != null) {
@@ -228,12 +228,12 @@ function checkToken(token) {
 function error(expected) {
 	console.log("Error in Line " + TokensLine[currentToken] + ". Expected '" + expected + "' instead of '" + globalTokens[0] + "'.");
 	correctCode = false;
-	consoleMessage = "<span class=\"consoleError\"> Error in Line " + TokensLine[currentToken] + ". Expected " + expected + " instead of '" + globalTokens[0] + "'. </span><br><br>";
+	let consoleMessage = "<span class=\"consoleError\"> Error in Line " + TokensLine[currentToken] + ". Expected " + expected + " instead of '" + globalTokens[0] + "'. </span><br><br>";
 	document.getElementById("consoleText").innerHTML += consoleMessage;
 }
 
 function printIntermediateCode(){
-	var line=0;
+	let line=0;
 	codIntermedio.forEach(cell=>{
         switch(cell){
             case IF:
@@ -437,7 +437,7 @@ function _function() {
 		name:funcName,
 		index:i,
 		functionNumber:nextFunction
-	}
+	};
 	i++;
 	nextFunction--;
 	funcTable.push(newFunc);
@@ -966,7 +966,7 @@ function demandNumber() {
         throw {name:"SyntaxException",message:"empty globalTokens"};
 	let number = globalTokens[0];
 	if(!number.match(/^[0-9]+$/)){
-		error("valid number")
+		error("valid number");
         throw {name:"SyntaxException",message:"expected valid number, found : "+number+" instead"};
 	}
     globalTokens.splice(0,1);
