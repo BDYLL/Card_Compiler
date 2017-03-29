@@ -370,6 +370,8 @@ function program() {
 	demand("class");
 	demand("program");
 	demand("{");
+	codIntermedio[i++]=JMP;
+	stack.push(i++);
 	functions();
 	mainFunction();
 	demand("}");
@@ -503,6 +505,7 @@ function mainFunction(){
 	demand("(");
 	demand(")");
 	demand("{");
+	codIntermedio[stack.pop()]=i;
 	body();
 	demand("}");
 	printIntermediateCode();
