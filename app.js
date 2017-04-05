@@ -1059,7 +1059,7 @@ $(function () {
 
 //PARSER
 let deck; //arreglo de 0...52 donde cada posicion es un arreglo de cartas.
-let mano;
+let mano = null;
 
 
 
@@ -1099,6 +1099,31 @@ function initializeDeck(){
 
 
 //hace una funcion para cada tipo de isntruccion
+//getCard(deck)
+function getCard(deck){
+	if(mano != null){
+		mano = deck[deck].cards.pop(0);
+		return true;
+	}
+	return false;
+}
+//putCard(deck)
+function putCard(deck){
+	if(mano == null){
+		deck[deck].splice(0,0, mano);
+		mano = null;
+		return true;
+	}
+	return false;
+}
+//flip
+function flip(){
+	if(mano != null){
+		mano.flipped = !mano.flipped;
+		return true;
+	}
+	return false;
+}
 
 //hacer siguiente instruccion, esta fucntion la llamara el frontend y asi manejara sus cosas
 
