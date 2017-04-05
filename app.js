@@ -1056,3 +1056,52 @@ $(function () {
 	}
 	);
 });
+
+//PARSER
+let deck; //arreglo de 0...52 donde cada posicion es un arreglo de cartas.
+let mano;
+
+//primera funcion donde se declaran y se pone las cosas con sus valores iniciales
+function main(){
+	deck = [];
+	initializeDeck();
+
+}
+
+function initializeDeck(){
+	for(i = 0; i < 53;i++){
+		deck.push({
+			cards : []
+		});
+	}
+	//crear un deck con todas las cartas de la cual generare el primer deck
+	let color;
+	let suit = ["Heart", "Clubs", "Diamonds", "Spades"];
+	let preStartingDeck = [];
+	for(i = 0; i < 4; i++){
+		for(j = 1; j < 14; j++){
+			if(i%2 == 0){
+				color = "Red";
+			}else{
+				color = "Black";
+			}
+			preStartingDeck.push({
+				value : j,
+				color : color,
+				suit : suit[i],
+				flipped : false
+			});
+		}
+	}
+	let pos;
+	let card;
+	while(preStartingDeck.length > 0){
+		pos = Math.floor((Math.random() * preStartingDeck.length));
+		deck[0].cards.push(preStartingDeck.pop(pos));
+	}
+}
+
+
+
+
+//end of parser
