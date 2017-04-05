@@ -1061,14 +1061,10 @@ $(function () {
 let deck; //arreglo de 0...52 donde cada posicion es un arreglo de cartas.
 let mano;
 
-//primera funcion donde se declaran y se pone las cosas con sus valores iniciales
-function main(){
-	deck = [];
-	initializeDeck();
 
-}
 
 function initializeDeck(){
+	deck = []
 	for(i = 0; i < 53;i++){
 		deck.push({
 			cards : []
@@ -1100,6 +1096,11 @@ function initializeDeck(){
 		deck[0].cards.push(preStartingDeck.pop(pos));
 	}
 }
+
+
+//hace una funcion para cada tipo de isntruccion
+
+//hacer siguiente instruccion, esta fucntion la llamara el frontend y asi manejara sus cosas
 
 
 
