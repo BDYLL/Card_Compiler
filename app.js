@@ -38,40 +38,40 @@ let TokensLine = [];
 let currentToken;
 let correctCode;
 
-const IF = -1;
-const WHILE = -2;
-const ITERATE = -3;
-const RETURN = -4;
+const IF = 10;
+const WHILE = 20;
+const ITERATE = 30;
+const RETURN = 500;
 const INICIOPROG = -5;
-const FIN = -6;
-const JMP = -7;
-const CALL = -8;
-const FLIP=-9;
-const GETCARD=-10;
-const PUTCARD=-11;
+const FIN = 600;
+const JMP = 100;
+const CALL = 110;
+const FLIP=301;
+const GETCARD=302;
+const PUTCARD=303;
 
-const ISBLACK=-12;
-const ISRED=-28;
-const ISHEART=-13;
-const ISCLUBS=-14;
-const ISDIAMOND=-15;
-const ISSPADES=-16;
-const ISNOTBLACK=-17;
+const ISBLACK=202;
+const ISRED=201;
+const ISHEART=203;
+const ISCLUBS=204;
+const ISDIAMOND=205;
+const ISSPADES=206;
+const ISNOTBLACK=208;
 const ISNOTRED=-29;
-const ISNOTHEART=-18;
-const ISNOTCLUBS=-19;
-const ISNOTDIAMOND=-20;
-const ISNOTSPADES=-21;
+const ISNOTHEART=209;
+const ISNOTCLUBS=210;
+const ISNOTDIAMOND=211;
+const ISNOTSPADES=212;
 
-const LESSTHAN=-22;
-const GREATERTHAN=-23;
-const LESSOREQUAL=-24;
-const GREATEROREQUAL=-25;
-const EQUAL=-26;
-const DIFFERENT=-27;
+const LESSTHAN=281;
+const GREATERTHAN=282;
+const LESSOREQUAL=283;
+const GREATEROREQUAL=284;
+const EQUAL=285;
+const DIFFERENT=286;
 
-const ISEMPTY=-30;
-const ISNOTEMPTY=-31;
+const ISEMPTY=250;
+const ISNOTEMPTY=251;
 
 const VALUE=-32;
 
@@ -140,6 +140,9 @@ function checkCode(code) {
 
 		try {
             program();
+
+            codIntermedio.forEach(s=>console.log(s));
+
         }
         catch(err){
 			if(err.name==="SyntaxException"){
@@ -444,7 +447,7 @@ function _function() {
 	codIntermedio[i]=nextFunction;
 	let newFunc={
 		name:funcName,
-		index:i,
+		index:i+1,
 		functionNumber:nextFunction
 	};
 	i++;
@@ -508,6 +511,7 @@ function mainFunction(){
 	codIntermedio[stack.pop()]=i;
 	body();
 	demand("}");
+	codIntermedio[i++]=FIN;
 	printIntermediateCode();
 }
 
