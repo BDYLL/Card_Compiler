@@ -1060,10 +1060,13 @@ $(function () {
 //PARSER
 let deck; //arreglo de 0...52 donde cada posicion es un arreglo de cartas.
 let mano = null;
-
+//el error sera una variable global, cuando la funcion siguienteInstruccion regrese falso, el front end debe
+//asumir que hubo un error de semantica y se debe checar el string global para obtener mensaje de error
+let errorMessage;
 
 
 function initializeDeck(){
+	resetIndex();
 	deck = []
 	for(i = 0; i < 53;i++){
 		deck.push({
@@ -1102,10 +1105,21 @@ function initializeDeck(){
 //getCard(deck)
 function getCard(deck){
 	if(mano != null){
-		mano = deck[deck].cards.pop(0);
-		return true;
+		if(deck[deck].cards.length > 0){
+			mano = deck[deck].cards.pop(0);
+			return true;
+		}else{
+			errorMessage = "The deck you tried to get card from is empty.";
+			resetIndex();
+			return false;
+		}
+
+	}else{
+		errorMessage = "You already have a card in your hand, you cannot take another one.";
+		resetIndex();
+		return false;
 	}
-	return false;
+
 }
 //putCard(deck)
 function putCard(deck){
@@ -1113,20 +1127,30 @@ function putCard(deck){
 		deck[deck].splice(0,0, mano);
 		mano = null;
 		return true;
+	}else{
+		errorMessage = "You tried to put a card you don't have in your hand";
+		resetIndex();
+		return false;
 	}
-	return false;
 }
 //flip
 function flip(){
 	if(mano != null){
 		mano.flipped = !mano.flipped;
 		return true;
+	}else{
+		errorMessage = "You cannot flip if you don't have a card on your hand";
+		resetIndex();
+		return false;
 	}
-	return false;
 }
 
 //hacer siguiente instruccion, esta fucntion la llamara el frontend y asi manejara sus cosas
+let CIindex;
 
+function resetIndex(){
+	CIindex = 0;
+}
 
 
 
