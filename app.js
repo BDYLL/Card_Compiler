@@ -1064,10 +1064,9 @@ let mano = null;
 //asumir que hubo un error de semantica y se debe checar el string global para obtener mensaje de error
 let errorMessage;
 
-
 function initializeDeck(){
-	resetIndex();
-	deck = []
+	deck = [];
+	end = false;
 	for(i = 0; i < 53;i++){
 		deck.push({
 			cards : []
@@ -1146,12 +1145,138 @@ function flip(){
 }
 
 //hacer siguiente instruccion, esta fucntion la llamara el frontend y asi manejara sus cosas
-let CIindex;
-
+let CIindex = 0;
+let afterFunction;
 function resetIndex(){
 	CIindex = 0;
 }
 
+function executeNextAction(){
+	if(CIindex == 0){
+		initializeDeck();
+	}
+	if(CIindex >= codIntermedio.length){
+		//decir que ya se acabo de alguna manera
+		return true;
+	}
 
+
+	switch(codIntermedio[CIindex]){
+		case JMP:
+			CIindex = codIntermedio[CIindex + 1];
+			if(codIntermedio[CIindex + 1] <= -33)
+				afterFunction = CIindex + 2;
+				executeNextAction();
+			break;
+		case IF:
+			printAction("IF: ");
+			switch(codIntermedio[++CIindex]){
+				case VALUE:
+					//hacer un if para validar si se tiene carta en mano
+          switch(codIntermedio[++CIindex]){
+						case LESSTHAN:
+							if(mano.value < codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								executeNextAction();
+							}
+							break;
+						case GREATERTHAN:
+							if(mano.value > codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								executeNextAction();
+							}
+							break;
+						case LESSOREQUAL:
+							if(mano.value <= codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								executeNextAction();
+							}
+							break;
+						case GREATEROREQUAL:
+							if(mano.value >= codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								executeNextAction();
+							}
+							break;
+						case EQUAL:
+							if(mano.value == codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								executeNextAction();
+							}
+							break;
+						case DIFFERENT:
+							if(mano.value != codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								executeNextAction();
+							}
+							break;
+					}
+					break;
+				case ISEMPTY:
+					//validar que haya cartas en el deck
+					if(deck[codIntermedio[++CIindex]].length == 0){
+						printAction("True");
+						CIindex += 3;
+						executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						executeNextAction();
+					}
+					break;
+				case ISNOTEMPTY:
+					//validar que haya cartas en el deck
+					if(deck[codIntermedio[++CIindex]].length > 0){
+						printAction("True");
+						CIindex += 3;
+						executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						executeNextAction();
+					}
+					break;
+			}
+			break;
+		case WHILE:
+
+			break;
+	}
+}
+
+function printAction(mensaje){
+	consoleMessage = "<span class=\"consoleCorrect\"> "+ message +" </span><br><br>";
+	document.getElementById("consoleText").innerHTML += consoleMessage;
+}
 
 //end of parser
