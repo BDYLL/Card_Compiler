@@ -153,6 +153,7 @@ function checkCode(code) {
 			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br><br>";
 			document.getElementById("consoleText").innerHTML += consoleMessage;
 			canExecute = true;
+			resetIndex();
 		}else{
 			canExecute = false;
 		}
@@ -1117,12 +1118,14 @@ function getCard(d){
 		}else{
 			errorMessage = "The deck you tried to get card from is empty.";
 			resetIndex();
+			canExecute = false;
 			return false;
 		}
 
 	}else{
 		errorMessage = "You already have a card in your hand, you cannot take another one.";
 		resetIndex();
+		canExecute = false;
 		return false;
 	}
 
@@ -1136,6 +1139,7 @@ function putCard(d){
 	}else{
 		errorMessage = "You tried to put a card you don't have in your hand";
 		resetIndex();
+		canExecute = false;
 		return false;
 	}
 }
@@ -1147,13 +1151,14 @@ function flip(){
 	}else{
 		errorMessage = "You cannot flip if you don't have a card on your hand";
 		resetIndex();
+		canExecute = false;
 		return false;
 	}
 }
 
 //hacer siguiente instruccion, esta fucntion la llamara el frontend y asi manejara sus cosas
 let CIindex = 0;
-let afterFunction;
+let afterFunction = [];
 let inIterate;
 let iteration;
 let lastFunctionExecuted;
@@ -1166,91 +1171,83 @@ function executeNextAction(){
 	if(CIindex === 0){
 		initializeDeck();
 	}
-	if(CIindex >= codIntermedio.length){
-		lastFunctionExecuted = "end";
-		return true;
-	}
+
 
 
 	switch(codIntermedio[CIindex]){
 		case JMP:
+		  if(codIntermedio[codIntermedio[CIindex+1]] <= -33){
+				console.log("hi");
+				afterFunction.push(CIindex + 2);
+			}
 			CIindex = codIntermedio[CIindex + 1];
-			if(codIntermedio[CIindex + 1] <= -33)
-				afterFunction = CIindex + 2;
-				executeNextAction();
-			break;
+			return executeNextAction();
 		case IF:
 			printAction("IF: ");
 			switch(codIntermedio[++CIindex]){
 				case VALUE:
 					//hacer un if para validar si se tiene carta en mano
-          switch(codIntermedio[++CIindex]){
+					switch(codIntermedio[++CIindex]){
 						case LESSTHAN:
 							if(mano.value < codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case GREATERTHAN:
 							if(mano.value > codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case LESSOREQUAL:
 							if(mano.value <= codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case GREATEROREQUAL:
 							if(mano.value >= codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case EQUAL:
 							if(mano.value == codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case DIFFERENT:
 							if(mano.value != codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 					}
 					break;
 				case ISEMPTY:
@@ -1258,166 +1255,153 @@ function executeNextAction(){
 					if(deck[codIntermedio[++CIindex]].length == 0){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISNOTEMPTY:
 					//validar que haya cartas en el deck
 					if(deck[codIntermedio[++CIindex]].length > 0){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISBLACK:
 				//validar que la mano tenga carta
 					if(mano.color == "Black"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISRED:
 				//validar que la mano tenga carta
 					if(mano.color == "Red"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISHEART:
 					//validar que la mano tenga carta
 					if(mano.color == "Heart"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISCLUBS:
 					//validar que la mano tenga carta
 					if(mano.color == "Clubs"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISDIAMOND:
 				//validar que la mano tenga carta
 					if(mano.color == "Diamond"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISSPADES:
 					if(mano.color == "Spades"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
 				case ISNOTBLACK:
 					//validar que la mano tenga carta
 					if(mano.color != "Black"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 					case ISNOTRED:
 					//validar que la mano tenga carta
 						if(mano.color != "Red"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 					case ISNOTHEART:
 						//validar que la mano tenga carta
 						if(mano.color != "Heart"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 					case ISNOTCLUBS:
 						//validar que la mano tenga carta
 						if(mano.color != "Clubs"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 					case ISNOTDIAMOND:
 					//validar que la mano tenga carta
 						if(mano.color != "Diamond"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 					case ISNOTSPADES:
 						if(mano.color != "Spades"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++; 3;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 			}
 			break;
 		case WHILE:
@@ -1430,68 +1414,62 @@ function executeNextAction(){
 							if(mano.value < codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case GREATERTHAN:
 							if(mano.value > codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case LESSOREQUAL:
 							if(mano.value <= codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case GREATEROREQUAL:
 							if(mano.value >= codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case EQUAL:
 							if(mano.value == codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 						case DIFFERENT:
 							if(mano.value != codIntermedio[++CIindex]){
 								printAction("True");
 								CIindex += 3;
-								executeNextAction();
+								return executeNextAction();
 							}else{
 								printAction("False");
 								CIindex++;
-								executeNextAction();
+								return executeNextAction();
 							}
-							break;
 					}
 					break;
 				case ISEMPTY:
@@ -1499,166 +1477,153 @@ function executeNextAction(){
 					if(deck[codIntermedio[++CIindex]].length == 0){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISNOTEMPTY:
 					//validar que haya cartas en el deck
 					if(deck[codIntermedio[++CIindex]].length > 0){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISBLACK:
 				//validar que la mano tenga carta
 					if(mano.color == "Black"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISRED:
 				//validar que la mano tenga carta
 					if(mano.color == "Red"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISHEART:
 					//validar que la mano tenga carta
 					if(mano.color == "Heart"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISCLUBS:
 					//validar que la mano tenga carta
 					if(mano.color == "Clubs"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISDIAMOND:
 				//validar que la mano tenga carta
 					if(mano.color == "Diamond"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 				case ISSPADES:
 					if(mano.color == "Spades"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
 				case ISNOTBLACK:
 					//validar que la mano tenga carta
 					if(mano.color != "Black"){
 						printAction("True");
 						CIindex += 3;
-						executeNextAction();
+						return executeNextAction();
 					}else{
 						printAction("False");
 						CIindex++;
-						executeNextAction();
+						return executeNextAction();
 					}
-					break;
 					case ISNOTRED:
 					//validar que la mano tenga carta
 						if(mano.color != "Red"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 					case ISNOTHEART:
 						//validar que la mano tenga carta
 						if(mano.color != "Heart"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 					case ISNOTCLUBS:
 						//validar que la mano tenga carta
 						if(mano.color != "Clubs"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 					case ISNOTDIAMOND:
 					//validar que la mano tenga carta
 						if(mano.color != "Diamond"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 					case ISNOTSPADES:
 						if(mano.color != "Spades"){
 							printAction("True");
 							CIindex += 3;
-							executeNextAction();
+							return executeNextAction();
 						}else{
 							printAction("False");
 							CIindex++; 3;
-							executeNextAction();
+							return executeNextAction();
 						}
-						break;
 			}
 			break;
 		case ITERATE:
@@ -1667,26 +1632,24 @@ function executeNextAction(){
 					printAction("Next Iteration");
 					CIindex += 4;
 					iteration--;
-					executeNextAction();
+					return executeNextAction();
 				}else{
 					printAction("Ending ITERATE");
 					CIindex += 2;
 					inIterate = false;
-					executeNextAction();
+					return executeNextAction();
 				}
 			}else{
 					printAction("Starting Iterate");
 					inIterate = true;
 					iteration = codIntermedio[++CIindex]  - 1;
 					CIindex += 3;
-					executeNextAction();
+					return executeNextAction();
 			}
-			break;
 		case RETURN:
 			printAction("Exiting Function");
-			CIindex = afterFunction;
-			executeNextAction();
-			break;
+			CIindex = afterFunction.pop();
+			return executeNextAction();
 		case FLIP:
 			CIindex++;
 			lastFunctionExecuted = "flip";
@@ -1707,11 +1670,18 @@ function executeNextAction(){
 
 				printAction("Entering Function");
 				CIindex++;
-				executeNextAction();
-			}else{
-				printAction("BUG: asign case in the semantic switch to the position: " + CIindex);
+				return executeNextAction();
+			}else if(CIindex >= codIntermedio.length){
+				printAction("End");
+				lastFunctionExecuted = "end";
+				canExecute = false;
+				return true;
 			}
-			break;
+			else{
+				printAction("BUG: asign case in the semantic switch to the position: " + CIindex);
+				canExecute = false;
+				return false;
+			}
 	}
 }
 
