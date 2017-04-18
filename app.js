@@ -1177,7 +1177,6 @@ function executeNextAction(){
 	switch(codIntermedio[CIindex]){
 		case JMP:
 		  if(codIntermedio[codIntermedio[CIindex+1]] <= -33){
-				console.log("hi");
 				afterFunction.push(CIindex + 2);
 			}
 			CIindex = codIntermedio[CIindex + 1];
