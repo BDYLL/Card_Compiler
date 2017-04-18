@@ -516,6 +516,7 @@ function mainFunction(){
 	codIntermedio[stack.pop()]=i;
 	body();
 	demand("}");
+	codIntermedio[i++]=FIN;
 	printIntermediateCode();
 }
 
