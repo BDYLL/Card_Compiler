@@ -150,7 +150,7 @@ function checkCode(code) {
 			}
 		}
 		if (correctCode) {
-			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br><br>";
+			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br>";
 			document.getElementById("consoleText").innerHTML += consoleMessage;
 			canExecute = true;
 			resetIndex();
@@ -163,7 +163,7 @@ function checkCode(code) {
 	}
 	else {
 		console.log("El código NO es correcto!");
-		consoleMessage = "<span class=\"consoleError\"> Invalid Token in line " + getRow(code, globalTokens[i]) + ": " + globalTokens[i] + " </span><br><br>";
+		consoleMessage = "<span class=\"consoleError\"> Invalid Token in line " + getRow(code, globalTokens[i]) + ": " + globalTokens[i] + " </span><br>";
 		document.getElementById("consoleText").innerHTML += consoleMessage;
 	}
 }
@@ -236,7 +236,7 @@ function checkToken(token) {
 function error(expected) {
 	console.log("Error in Line " + TokensLine[currentToken] + ". Expected '" + expected + "' instead of '" + globalTokens[0] + "'.");
 	correctCode = false;
-	let consoleMessage = "<span class=\"consoleError\"> Error in Line " + TokensLine[currentToken] + ". Expected " + expected + " instead of '" + globalTokens[0] + "'. </span><br><br>";
+	let consoleMessage = "<span class=\"consoleError\"> Error in Line " + TokensLine[currentToken] + ". Expected " + expected + " instead of '" + globalTokens[0] + "'. </span><br>";
 	document.getElementById("consoleText").innerHTML += consoleMessage;
 }
 
@@ -1670,7 +1670,7 @@ function executeNextAction(){
 				printAction("Entering Function");
 				CIindex++;
 				return executeNextAction();
-			}else if(CIindex >= codIntermedio.length){
+			}else if(codIntermedio[CIndex] == FIN){
 				printAction("End");
 				lastFunctionExecuted = "end";
 				canExecute = false;
@@ -1685,7 +1685,7 @@ function executeNextAction(){
 }
 
 function printAction(message){
-	consoleMessage = "<span class=\"consoleCorrect\"> "+ message +" </span><br><br>";
+		consoleMessage = "<span class=\"consoleCorrect\"> "+ message +" </span><br>";
 	document.getElementById("consoleText").innerHTML += consoleMessage;
 
 }
