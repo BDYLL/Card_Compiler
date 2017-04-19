@@ -50,28 +50,28 @@ const FLIP=-9;
 const GETCARD=-10;
 const PUTCARD=-11;
 
-const ISBLACK=-12;
-const ISRED=-28;
-const ISHEART=-13;
-const ISCLUBS=-14;
-const ISDIAMOND=-15;
-const ISSPADES=-16;
-const ISNOTBLACK=-17;
-const ISNOTRED=-29;
-const ISNOTHEART=-18;
-const ISNOTCLUBS=-19;
-const ISNOTDIAMOND=-20;
-const ISNOTSPADES=-21;
+const ISBLACK=-13;
+const ISRED=-12;
+const ISHEART=-14;
+const ISCLUBS=-15;
+const ISDIAMOND=-16;
+const ISSPADES=-17;
+const ISNOTBLACK=-19;
+const ISNOTRED=-18;
+const ISNOTHEART=-20;
+const ISNOTCLUBS=-21;
+const ISNOTDIAMOND=-22;
+const ISNOTSPADES=-23;
 
-const LESSTHAN=-22;
-const GREATERTHAN=-23;
-const LESSOREQUAL=-24;
-const GREATEROREQUAL=-25;
-const EQUAL=-26;
-const DIFFERENT=-27;
+const LESSTHAN=-26;
+const GREATERTHAN=-27;
+const LESSOREQUAL=-28;
+const GREATEROREQUAL=-29;
+const EQUAL=-30;
+const DIFFERENT=-31;
 
-const ISEMPTY=-30;
-const ISNOTEMPTY=-31;
+const ISEMPTY=-24;
+const ISNOTEMPTY=-25;
 
 const VALUE=-32;
 
@@ -135,6 +135,7 @@ function checkCode(code) {
 	console.log(globalTokens);
 	if (correct) {
 		console.log("El código es correcto!");
+		console.log(codIntermedio);
 		correctCode = true;
 		currentToken = 0;
 
