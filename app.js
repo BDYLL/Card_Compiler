@@ -1140,6 +1140,7 @@ function getCard(d){
 	if(mano == null){
 		if(deck[d].cards.length > 0){
 			mano = deck[d].cards.pop(0);
+			console.log(mano);
 			return true;
 		}else{
 			errorMessage = "The deck you tried to get a card from is empty.";
@@ -1295,7 +1296,7 @@ function executeNextAction(){
 				case ISEMPTY:
 					//validar que haya cartas en el deck
 
-					if(deck[codIntermedio[++CIindex]].length == 0){
+					if(deck[codIntermedio[++CIindex]].cards.length == 0){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1306,7 +1307,7 @@ function executeNextAction(){
 					}
 				case ISNOTEMPTY:
 					//validar que haya cartas en el deck
-					if(deck[codIntermedio[++CIindex]].length > 0){
+					if(deck[codIntermedio[++CIindex]].cards.length > 0){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1545,6 +1546,7 @@ function executeNextAction(){
 				printAction("End");
 				lastFunctionExecuted = "end";
 				canExecute = false;
+				console.log(deck);
 				return true;
 			}
 			else{
