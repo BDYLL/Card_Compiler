@@ -1140,7 +1140,6 @@ function getCard(d){
 	if(mano == null){
 		if(deck[d].cards.length > 0){
 			mano = deck[d].cards.pop(0);
-			console.log(mano);
 			return true;
 		}else{
 			errorMessage = "The deck you tried to get a card from is empty.";
