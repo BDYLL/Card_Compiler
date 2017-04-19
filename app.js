@@ -99,7 +99,27 @@ function clearText(){
 	document.getElementById("consoleText").innerHTML = "";
 	document.getElementById("consoleText").innerHTML = "Esta es la consola, donde apareceran errores en el codigo al momento de ejecutarse: <br>";
 }
+
+
+function executeIntermediateCode(){
+	let intermediate=document.getElementById("codeArea").value;
+	let arr = intermediate.split("\n");
+	arr=arr.filter(s=>s!=="");
+	let codInt = [];
+
+	arr.forEach(s=>codInt.push(parseInt(s)));
+
+	console.log(codInt.length);
+	codInt.forEach(s=>console.log(s));
+
+
+
+
+}
+
+
 let canExecute = false;
+
 function checkCode(code) {
 	let correct = true;
 
@@ -518,6 +538,7 @@ function mainFunction(){
 	demand("}");
 	codIntermedio[i++]=FIN;
 	printIntermediateCode();
+	codIntermedio.forEach(s=>console.log(s));
 }
 
 function body() {

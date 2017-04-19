@@ -10,6 +10,12 @@
     color: grey;
 }
 
+#codIntConsole{
+    padding:3px;
+    color: grey;
+}
+
+
 .consoleError{
     color:red
 }
