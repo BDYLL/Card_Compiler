@@ -1118,8 +1118,9 @@ function initializeDeck(){
 function getCard(d){
 	if(mano == null){
 		if(deck[d].cards.length > 0){
+			console.log(deck[d].card);
 			mano = deck[d].cards.pop(0);
-			cosole.log(mano);
+			console.log(mano);
 			console.log(deck[d].card);
 			return true;
 		}else{
