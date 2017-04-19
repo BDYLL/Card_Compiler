@@ -98,6 +98,7 @@ function testText() {
 function clearText(){
 	document.getElementById("consoleText").innerHTML = "";
 	document.getElementById("consoleText").innerHTML = "Esta es la consola, donde apareceran errores en el codigo al momento de ejecutarse: <br>";
+    document.getElementById("codIntConsole").innerHTML="Aquí se mostrará el código intermedio";
 }
 
 
@@ -109,11 +110,25 @@ function executeIntermediateCode(){
 
 	arr.forEach(s=>codInt.push(parseInt(s)));
 
-	console.log(codInt.length);
-	codInt.forEach(s=>console.log(s));
+	codIntermedio=codInt;
 
+	canExecute=true;
+	resetIndex();
+}
 
+function printIntCodeToConsole(){
 
+	let str="";
+
+	codIntermedio.forEach(s=>{
+		str+=s.toString()+"<br>";
+	});
+
+    let message="<span class=\"consoleCorrect\"> <br>"+str+" </span><br>";
+
+    document.getElementById("codIntConsole").innerHTML="Aquí se mostrará el código intermedio";
+
+    document.getElementById("codIntConsole").innerHTML+=message;
 
 }
 
@@ -172,6 +187,7 @@ function checkCode(code) {
 		if (correctCode) {
 			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br>";
 			document.getElementById("consoleText").innerHTML += consoleMessage;
+			printIntCodeToConsole();
 			canExecute = true;
 			resetIndex();
 		}else{
