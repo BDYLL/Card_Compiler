@@ -1100,11 +1100,15 @@ function initializeDeck(){
 			});
 		}
 	}
+
 	let pos;
-	let card;
+
 	while(preStartingDeck.length > 0){
 		pos = Math.floor((Math.random() * preStartingDeck.length));
-		deck[0].cards.push(preStartingDeck.pop(pos));
+
+		deck[0].cards.push(preStartingDeck[pos]);
+		preStartingDeck.splice(pos, 1);
+
 	}
 }
 
@@ -1115,10 +1119,13 @@ function getCard(d){
 	if(mano == null){
 		if(deck[d].cards.length > 0){
 			mano = deck[d].cards.pop(0);
+			cosole.log(mano);
+			console.log(deck[d].card);
 			return true;
 		}else{
 			errorMessage = "The deck you tried to get card from is empty.";
 			resetIndex();
+			errorAction("The deck you tried to get card from is empty.");
 			canExecute = false;
 			return false;
 		}
@@ -1126,6 +1133,7 @@ function getCard(d){
 	}else{
 		errorMessage = "You already have a card in your hand, you cannot take another one.";
 		resetIndex();
+		errorAction("You already have a card in your hand, you cannot take another one.");
 		canExecute = false;
 		return false;
 	}
@@ -1671,7 +1679,7 @@ function executeNextAction(){
 				printAction("Entering Function");
 				CIindex++;
 				return executeNextAction();
-			}else if(codIntermedio[CIndex] == FIN){
+			}else if(codIntermedio[CIindex] == FIN){
 				printAction("End");
 				lastFunctionExecuted = "end";
 				canExecute = false;
@@ -1688,7 +1696,10 @@ function executeNextAction(){
 function printAction(message){
 		consoleMessage = "<span class=\"consoleCorrect\"> "+ message +" </span><br>";
 	document.getElementById("consoleText").innerHTML += consoleMessage;
-
+	console.log(deck);
 }
-
+function errorAction(errorMessage) {
+	let consoleMessage = "<span class=\"consoleError\"> " + errorMessage  + " </span><br>";
+	document.getElementById("consoleText").innerHTML += consoleMessage;
+}
 //end of parser
