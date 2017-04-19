@@ -1245,6 +1245,13 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
 					switch(codIntermedio[++CIindex]){
 						case LESSTHAN:
 							if(mano.value < codIntermedio[++CIindex]){
@@ -1340,6 +1347,13 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
 					if(mano.color == "Black"){
 						printAction("True");
 						CIindex += 3;
@@ -1354,6 +1368,13 @@ function executeNextAction(){
 					if(mano == null){
 						errorMessage = "You cannot compare if you don't have a card in your hand";
 						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
 						resetIndex();
 						canExecute = false;
 						return false;
@@ -1376,6 +1397,13 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
 					if(mano.color == "Heart"){
 						printAction("True");
 						CIindex += 3;
@@ -1390,6 +1418,13 @@ function executeNextAction(){
 					if(mano == null){
 						errorMessage = "You cannot compare if you don't have a card in your hand";
 						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
 						resetIndex();
 						canExecute = false;
 						return false;
@@ -1412,6 +1447,13 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
 					if(mano.color == "Diamond"){
 						printAction("True");
 						CIindex += 3;
@@ -1425,6 +1467,13 @@ function executeNextAction(){
 					if(mano == null){
 						errorMessage = "You cannot compare if you don't have a card in your hand";
 						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
 						resetIndex();
 						canExecute = false;
 						return false;
@@ -1447,6 +1496,13 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
 					if(mano.color != "Black"){
 						printAction("True");
 						CIindex += 3;
@@ -1456,60 +1512,130 @@ function executeNextAction(){
 						CIindex++;
 						return executeNextAction();
 					}
-					case ISNOTRED:
+				case ISNOTRED:
 					//validar que la mano tenga carta
-						if(mano.color != "Red"){
-							printAction("True");
-							CIindex += 3;
-							return executeNextAction();
-						}else{
-							printAction("False");
-							CIindex++;
-							return executeNextAction();
-						}
-					case ISNOTHEART:
-						//validar que la mano tenga carta
-						if(mano.color != "Heart"){
-							printAction("True");
-							CIindex += 3;
-							return executeNextAction();
-						}else{
-							printAction("False");
-							CIindex++;
-							return executeNextAction();
-						}
-					case ISNOTCLUBS:
-						//validar que la mano tenga carta
-						if(mano.color != "Clubs"){
-							printAction("True");
-							CIindex += 3;
-							return executeNextAction();
-						}else{
-							printAction("False");
-							CIindex++;
-							return executeNextAction();
-						}
-					case ISNOTDIAMOND:
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Red"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTHEART:
 					//validar que la mano tenga carta
-						if(mano.color != "Diamond"){
-							printAction("True");
-							CIindex += 3;
-							return executeNextAction();
-						}else{
-							printAction("False");
-							CIindex++;
-							return executeNextAction();
-						}
-					case ISNOTSPADES:
-						if(mano.color != "Spades"){
-							printAction("True");
-							CIindex += 3;
-							return executeNextAction();
-						}else{
-							printAction("False");
-							CIindex++; 3;
-							return executeNextAction();
-						}
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Heart"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTCLUBS:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Clubs"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTDIAMOND:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Diamond"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTSPADES:
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Spades"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++; 3;
+						return executeNextAction();
+					}
 			}
 			break;
 		case ITERATE:
