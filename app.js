@@ -189,7 +189,9 @@ function checkCode(code) {
 }
 function sigFuncion(){
 	if(canExecute){
-		console.log(executeNextAction());
+		if(executeNextAction()){
+			drawCards();
+		}
 	}
 }
 function getRow(code, token) {
@@ -200,7 +202,6 @@ function getRow(code, token) {
 			return i + 1;
 		}
 	}
-	console.log("yu wut m8");
 	return -1;
 }
 function getRowsPerToken(code) {
@@ -1725,3 +1726,28 @@ function errorAction(errorMessage) {
 	document.getElementById("consoleText").innerHTML += consoleMessage;
 }
 //end of parser
+
+function drawCards(){	
+	var i = 0;
+	for(i=0; i<53;i++){
+		if(deck[i].cards.length>0){
+			var lastCardPosition = deck[i].cards.length-1;
+			if(deck[i].cards[lastCardPosition].flipped){
+				var palo = deck[i].cards[lastCardPosition].suit;
+				var value = deck[i].cards[lastCardPosition].value;
+				var image = "" + palo + value;				
+			}else{
+				var image = "Back";
+			}			
+			document.getElementById("deckIma"+i).src = "cartas/"+image+".png";	
+		}
+	}
+	if(mano.flipped){
+		var palo = mano.suit;
+		var value = mano.value;
+		var image = "" + palo + value;	
+	}else{
+		var image = "Back";
+	}
+	document.getElementById("manoIma").src = "cartas/"+image+".png";		
+}
