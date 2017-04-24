@@ -1714,7 +1714,7 @@ function drawCards(){
 	for(i=0; i<53;i++){
 		if(deck[i].cards.length>0){
 			var lastCardPosition = deck[i].cards.length-1;
-			if(deck[i].cards[lastCardPosition].flipped){
+			if(!deck[i].cards[lastCardPosition].flipped){
 				var palo = deck[i].cards[lastCardPosition].suit;
 				var value = deck[i].cards[lastCardPosition].value;
 				var image = "" + palo + value;				
@@ -1722,14 +1722,21 @@ function drawCards(){
 				var image = "Back";
 			}			
 			document.getElementById("deckIma"+i).src = "cartas/"+image+".png";	
+		}else{
+			document.getElementById("deckIma"+i).src = "";	
 		}
 	}
-	if(mano.flipped){
-		var palo = mano.suit;
-		var value = mano.value;
-		var image = "" + palo + value;	
+	if(mano==null){
+		document.getElementById("manoIma").src = "";	
 	}else{
-		var image = "Back";
+		if(!mano.flipped){
+			var palo = mano.suit;
+			var value = mano.value;
+			var image = "" + palo + value;	
+		}else{
+			var image = "Back";
+		}
+		document.getElementById("manoIma").src = "cartas/"+image+".png";	
 	}
-	document.getElementById("manoIma").src = "cartas/"+image+".png";		
+
 }
