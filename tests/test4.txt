@@ -1,0 +1,29 @@
+class program
+{
+	program(){
+		while(isNotEmpty(0)){
+            getCard(0)
+			if(isHeart){
+				putCard(1)
+			}
+			else
+			{
+				if(isClubs){
+					putCard(2)
+				}
+				else
+				{
+					if(isDiamond){
+						putCard(3)
+					}
+					else
+					{
+						if(isSpades){
+							putCard(4)
+						}
+					}
+				}
+			}
+		}
+	}
+}
