@@ -1,0 +1,18 @@
+class program{
+	
+	void voltear(){
+
+		flip
+
+	}
+
+	program(){
+
+		getCard(0)
+
+		voltear
+
+		putCard(1)
+	}
+
+}

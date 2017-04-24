@@ -1,0 +1,22 @@
+class program{
+	
+	program(){
+
+		while(isNotEmpty(0)){
+
+			getCard(0)
+
+			if(isRed){
+
+
+				putCard(1)
+
+			}
+			else{
+
+				putCard(2)
+
+			}
+		}
+	}
+}

@@ -10,9 +10,29 @@
     color: grey;
 }
 
+#codIntConsole{
+    padding:3px;
+    color: grey;
+}
+
+
 .consoleError{
     color:red
 }
 .consoleCorrect{
     color:green
+}
+
+.col
+{
+    float: left;
+    width: 25%;
+}
+
+.last{
+    clear: left;
+}
+
+.row{
+    border: 1px solid green;
 }

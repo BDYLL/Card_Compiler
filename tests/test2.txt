@@ -1,0 +1,28 @@
+class program{
+	
+
+	void sacar(){
+
+		getCard(0)
+
+	}
+
+	void poner(){
+
+		putCard(50)
+
+	}
+
+	program(){
+
+		while(isNotEmpty(0)){
+
+			sacar
+
+			flip
+
+			poner
+
+		}
+	}
+}

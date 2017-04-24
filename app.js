@@ -98,7 +98,42 @@ function testText() {
 function clearText(){
 	document.getElementById("consoleText").innerHTML = "";
 	document.getElementById("consoleText").innerHTML = "Esta es la consola, donde apareceran errores en el codigo al momento de ejecutarse: <br>";
+    document.getElementById("codIntConsole").innerHTML="Aquí se mostrará el código intermedio";
 }
+
+
+function executeIntermediateCode(){
+	let intermediate=document.getElementById("codeArea").value;
+	let arr = intermediate.split("\n");
+	arr=arr.filter(s=>s!=="");
+	let codInt = [];
+
+	arr.forEach(s=>codInt.push(parseInt(s)));
+
+	codIntermedio=codInt;
+
+	canExecute=true;
+	resetIndex();
+}
+
+function printIntCodeToConsole(){
+
+	let str="";
+
+	codIntermedio.forEach(s=>{
+		str+=s.toString()+"<br>";
+	});
+
+    let message="<span class=\"consoleCorrect\"> <br>"+str+" </span><br>";
+
+    document.getElementById("codIntConsole").innerHTML="Aquí se mostrará el código intermedio";
+
+    document.getElementById("codIntConsole").innerHTML+=message;
+
+}
+
+
+let canExecute = false;
 
 function checkCode(code) {
 	let correct = true;
@@ -153,20 +188,31 @@ function checkCode(code) {
 			}
 		}
 		if (correctCode) {
-			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br><br>";
+			consoleMessage = "<span class=\"consoleCorrect\"> No Errors Detected </span><br>";
 			document.getElementById("consoleText").innerHTML += consoleMessage;
+			printIntCodeToConsole();
+			canExecute = true;
+			resetIndex();
+		}else{
+			canExecute = false;
 		}
 
-
+		console.log(codIntermedio);
 
 	}
 	else {
 		console.log("El código NO es correcto!");
-		consoleMessage = "<span class=\"consoleError\"> Invalid Token in line " + getRow(code, globalTokens[i]) + ": " + globalTokens[i] + " </span><br><br>";
+		consoleMessage = "<span class=\"consoleError\"> Invalid Token in line " + getRow(code, globalTokens[i]) + ": " + globalTokens[i] + " </span><br>";
 		document.getElementById("consoleText").innerHTML += consoleMessage;
 	}
 }
-
+function sigFuncion(){
+	if(canExecute){
+		if(executeNextAction()){
+			drawCards();
+		}
+	}
+}
 function getRow(code, token) {
 	let codeInRows = code.split("\n");
 	for (i = 0; i < codeInRows.length; i++) {
@@ -175,7 +221,6 @@ function getRow(code, token) {
 			return i + 1;
 		}
 	}
-	console.log("yu wut m8");
 	return -1;
 }
 function getRowsPerToken(code) {
@@ -231,7 +276,7 @@ function checkToken(token) {
 function error(expected) {
 	console.log("Error in Line " + TokensLine[currentToken] + ". Expected '" + expected + "' instead of '" + globalTokens[0] + "'.");
 	correctCode = false;
-	let consoleMessage = "<span class=\"consoleError\"> Error in Line " + TokensLine[currentToken] + ". Expected " + expected + " instead of '" + globalTokens[0] + "'. </span><br><br>";
+	let consoleMessage = "<span class=\"consoleError\"> Error in Line " + TokensLine[currentToken] + ". Expected " + expected + " instead of '" + globalTokens[0] + "'. </span><br>";
 	document.getElementById("consoleText").innerHTML += consoleMessage;
 }
 
@@ -513,6 +558,7 @@ function mainFunction(){
 	demand("}");
 	codIntermedio[i++]=FIN;
 	printIntermediateCode();
+	codIntermedio.forEach(s=>console.log(s));
 }
 
 function body() {
@@ -1060,3 +1106,640 @@ $(function () {
 	}
 	);
 });
+
+//PARSER
+let deck; //arreglo de 0...52 donde cada posicion es un arreglo de cartas.
+let mano = null;
+//el error sera una variable global, cuando la funcion siguienteInstruccion regrese falso, el front end debe
+//asumir que hubo un error de semantica y se debe checar el string global para obtener mensaje de error
+let errorMessage;
+
+function initializeDeck(){
+	deck = [];
+	inIterate = false;
+	for(i = 0; i < 53;i++){
+		deck.push({
+			cards : []
+		});
+	}
+	//crear un deck con todas las cartas de la cual generare el primer deck
+	let color;
+	let suit = ["Heart", "Clubs", "Diamond", "Spades"];
+	let preStartingDeck = [];
+	for(i = 0; i < 4; i++){
+		for(j = 1; j < 14; j++){
+			if(i%2 == 0){
+				color = "Red";
+			}else{
+				color = "Black";
+			}
+			preStartingDeck.push({
+				value : j,
+				color : color,
+				suit : suit[i],
+				flipped : false
+			});
+		}
+	}
+
+	let pos;
+
+	while(preStartingDeck.length > 0){
+		pos = Math.floor((Math.random() * preStartingDeck.length));
+
+		deck[0].cards.push(preStartingDeck[pos]);
+		preStartingDeck.splice(pos, 1);
+
+	}
+}
+
+
+//hace una funcion para cada tipo de isntruccion
+//getCard(deck)
+function getCard(d){
+	if(mano == null){
+		if(deck[d].cards.length > 0){
+			mano = deck[d].cards.pop(0);
+			return true;
+		}else{
+			errorMessage = "The deck you tried to get a card from is empty.";
+			resetIndex();
+			errorAction("The deck you tried to get a card from is empty.");
+			canExecute = false;
+			return false;
+		}
+
+	}else{
+		errorMessage = "You already have a card in your hand, you cannot take another one.";
+		resetIndex();
+		errorAction("You already have a card in your hand, you cannot take another one.");
+		canExecute = false;
+		return false;
+	}
+
+}
+//putCard(deck)
+function putCard(d){
+	if(mano != null){
+		deck[d].cards.push(mano);
+		mano = null;
+		return true;
+	}else{
+		errorMessage = "You tried to put a card you don't have in your hand";
+		errorAction("You tried to put a card you don't have in your hand");
+		resetIndex();
+		canExecute = false;
+		return false;
+	}
+}
+//flip
+function flip(){
+	if(mano != null){
+		mano.flipped = !mano.flipped;
+		return true;
+	}else{
+		errorMessage = "You cannot flip if you don't have a card on your hand";
+		resetIndex();
+		errorAction("You cannot flip if you don't have a card on your hand");
+		canExecute = false;
+		return false;
+	}
+}
+
+//hacer siguiente instruccion, esta fucntion la llamara el frontend y asi manejara sus cosas
+let CIindex = 0;
+let afterFunction = [];
+let inIterate;
+let iteration;
+let lastFunctionExecuted;
+function resetIndex(){
+	CIindex = 0;
+	mano = null;
+	deck = [];
+}
+
+function executeNextAction(){
+	console.log(CIindex);
+	if(CIindex === 0){
+		initializeDeck();
+	}
+
+
+
+	switch(codIntermedio[CIindex]){
+		case JMP:
+		  if(codIntermedio[codIntermedio[CIindex+1]] <= -33){
+				afterFunction.push(CIindex + 2);
+			}
+			CIindex = codIntermedio[CIindex + 1];
+			return executeNextAction();
+		case IF:
+			if(codIntermedio[CIindex] == IF)
+				printAction("IF: ");
+		case WHILE:
+		if(codIntermedio[CIindex] == WHILE)
+			printAction("WHILE: ");
+			switch(codIntermedio[++CIindex]){
+				case VALUE:
+					//hacer un if para validar si se tiene carta en mano
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					switch(codIntermedio[++CIindex]){
+						case LESSTHAN:
+							if(mano.value < codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								return executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								return executeNextAction();
+							}
+						case GREATERTHAN:
+							if(mano.value > codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								return executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								return executeNextAction();
+							}
+						case LESSOREQUAL:
+							if(mano.value <= codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								return executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								return executeNextAction();
+							}
+						case GREATEROREQUAL:
+							if(mano.value >= codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								return executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								return executeNextAction();
+							}
+						case EQUAL:
+							if(mano.value == codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								return executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								return executeNextAction();
+							}
+						case DIFFERENT:
+							if(mano.value != codIntermedio[++CIindex]){
+								printAction("True");
+								CIindex += 3;
+								return executeNextAction();
+							}else{
+								printAction("False");
+								CIindex++;
+								return executeNextAction();
+							}
+					}
+					break;
+				case ISEMPTY:
+					//validar que haya cartas en el deck
+
+					if(deck[codIntermedio[++CIindex]].cards.length == 0){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTEMPTY:
+					//validar que haya cartas en el deck
+					if(deck[codIntermedio[++CIindex]].cards.length > 0){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISBLACK:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color == "Black"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISRED:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color == "Red"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISHEART:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color == "Heart"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISCLUBS:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color == "Clubs"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISDIAMOND:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color == "Diamond"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISSPADES:
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color == "Spades"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTBLACK:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Black"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTRED:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Red"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTHEART:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Heart"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTCLUBS:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Clubs"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTDIAMOND:
+					//validar que la mano tenga carta
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Diamond"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++;
+						return executeNextAction();
+					}
+				case ISNOTSPADES:
+					if(mano == null){
+						errorMessage = "You cannot compare if you don't have a card in your hand";
+						errorAction("You cannot compare if you don't have a card in your hand");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.flipped){
+						errorMessage = "You cannot compare because it is flipped";
+						errorAction("You cannot compare because it is flipped");
+						resetIndex();
+						canExecute = false;
+						return false;
+					}
+					if(mano.color != "Spades"){
+						printAction("True");
+						CIindex += 3;
+						return executeNextAction();
+					}else{
+						printAction("False");
+						CIindex++; 3;
+						return executeNextAction();
+					}
+			}
+			break;
+		case ITERATE:
+			if(inIterate){
+				if(iteration > 0){
+					printAction("Next Iteration");
+					CIindex += 4;
+					iteration--;
+					return executeNextAction();
+				}else{
+					printAction("Ending ITERATE");
+					CIindex += 2;
+					inIterate = false;
+					return executeNextAction();
+				}
+			}else{
+					printAction("Starting Iterate");
+					inIterate = true;
+					iteration = codIntermedio[++CIindex]  - 1;
+					CIindex += 3;
+					return executeNextAction();
+			}
+		case RETURN:
+			printAction("Exiting Function");
+			CIindex = afterFunction.pop();
+			return executeNextAction();
+		case FLIP:
+			CIindex++;
+			lastFunctionExecuted = "flip";
+			printAction("FLIP");
+			return flip();
+		case GETCARD:
+			CIindex++;
+			lastFunctionExecuted = "getCard";
+			printAction("GETCARD");
+			return getCard(codIntermedio[CIindex++]);
+		case PUTCARD:
+			CIindex++;
+			printAction("PUTCARD");
+			lastFunctionExecuted = "putCard";
+			return putCard(codIntermedio[CIindex++]);
+		default:
+			if(codIntermedio[CIindex] <= -33){
+
+				printAction("Entering Function");
+				CIindex++;
+				return executeNextAction();
+			}else if(codIntermedio[CIindex] == FIN){
+				printAction("End");
+				lastFunctionExecuted = "end";
+				canExecute = false;
+				console.log(deck);
+				return true;
+			}
+			else{
+				printAction("BUG: asign case in the semantic switch to the position: " + CIindex);
+				canExecute = false;
+				return false;
+			}
+	}
+}
+
+function printAction(message){
+		consoleMessage = "<span class=\"consoleCorrect\"> "+ message +" </span><br>";
+	document.getElementById("consoleText").innerHTML += consoleMessage;
+}
+function errorAction(errorMessage) {
+	let consoleMessage = "<span class=\"consoleError\"> " + errorMessage  + " </span><br>";
+	document.getElementById("consoleText").innerHTML += consoleMessage;
+}
+//end of parser
+
+function drawCards(){	
+	var i = 0;
+	for(i=0; i<53;i++){
+		if(deck[i].cards.length>0){
+			var lastCardPosition = deck[i].cards.length-1;
+			if(!deck[i].cards[lastCardPosition].flipped){
+				var palo = deck[i].cards[lastCardPosition].suit;
+				var value = deck[i].cards[lastCardPosition].value;
+				var image = "" + palo + value;				
+			}else{
+				var image = "Back";
+			}			
+			document.getElementById("deckIma"+i).src = "cartas/"+image+".png";	
+		}else{
+			document.getElementById("deckIma"+i).src = "";	
+		}
+	}
+	if(mano==null){
+		document.getElementById("manoIma").src = "";	
+	}else{
+		if(!mano.flipped){
+			var palo = mano.suit;
+			var value = mano.value;
+			var image = "" + palo + value;	
+		}else{
+			var image = "Back";
+		}
+		document.getElementById("manoIma").src = "cartas/"+image+".png";	
+	}
+
+}
