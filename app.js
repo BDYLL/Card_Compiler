@@ -492,7 +492,7 @@ function _function() {
 	codIntermedio[i]=nextFunction;
 	let newFunc={
 		name:funcName,
-		index:i+1,
+		index:i,
 		functionNumber:nextFunction
 	};
 	i++;
