@@ -1,0 +1,23 @@
+class program
+{
+	void Fb()
+	{
+		getCard(0)
+		if(isBlack)
+		{
+			putCard(1)
+		}
+		else
+		{
+			putCard(2)
+		}
+
+	}
+
+	program(){
+		while(isNotEmpty(0))
+		{
+			Fb
+		}
+	}
+}
