@@ -1,0 +1,12 @@
+class program{
+
+	program(){
+
+		iterate(12){
+			getCard(0)
+			putCard(1)
+		}
+
+	}
+
+}
