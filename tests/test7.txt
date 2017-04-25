@@ -1,0 +1,81 @@
+class program
+{
+	program(){
+		while(isNotEmpty(0)){
+	            getCard(0)
+			if(VALUE ==1){
+				putCard(1)
+			}
+			else
+			{
+				if(VALUE ==2){
+					putCard(2)
+				}
+				else
+				{
+					if(VALUE ==3){
+						putCard(3)
+					}
+					else
+					{
+						if(VALUE ==4){
+							putCard(4)
+						}
+						else
+						{
+							if(VALUE ==5){
+								putCard(5)
+							}
+							else
+							{
+								if(VALUE ==6){
+									putCard(6)
+								}
+								else
+								{
+									if(VALUE ==7){
+										putCard(7)
+									}
+									else
+									{
+										if(VALUE ==8){
+											putCard(8)
+										}
+										else
+										{
+											if(VALUE == 9){
+												putCard(9)
+											}
+											else
+											{
+												if(VALUE == 10){
+													putCard(10)
+												}
+												else
+												{
+													if(VALUE == 11){
+														putCard(11)
+													}
+													else
+													{
+														if(VALUE == 12){
+															putCard(12)
+														}
+														else
+														{
+															putCard(13)
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

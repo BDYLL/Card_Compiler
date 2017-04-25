@@ -1,0 +1,46 @@
+class program
+{
+	void tomarCarta()
+	{
+		getCard(0)
+	}
+
+	void tomarCartaDos(){
+
+		getCard(1)
+
+	}
+
+	void DejarCarta()
+	{
+		putCard(1)
+	}
+
+	void moverAuno()
+	{
+		while(isNotEmpty(0))
+		{
+			tomarCarta
+			DejarCarta
+		}
+	}
+
+	void Dejar()
+	{
+		putCard(2)
+	}
+
+	void moverAdos()
+	{
+		while(isNotEmpty(1))
+		{
+			tomarCartaDos
+			Dejar
+		}
+	}
+
+	program(){
+		moverAuno
+		moverAdos
+	}
+}
