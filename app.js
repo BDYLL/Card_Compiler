@@ -1408,7 +1408,7 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
-					if(mano.color == "Heart"){
+					if(mano.suit == "Heart"){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1433,7 +1433,7 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
-					if(mano.color == "Clubs"){
+					if(mano.suit == "Clubs"){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1458,7 +1458,7 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
-					if(mano.color == "Diamond"){
+					if(mano.suit == "Diamond"){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1482,7 +1482,7 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
-					if(mano.color == "Spades"){
+					if(mano.suit == "Spades"){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1557,7 +1557,7 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
-					if(mano.color != "Heart"){
+					if(mano.suit != "Heart"){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1582,7 +1582,7 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
-					if(mano.color != "Clubs"){
+					if(mano.suit != "Clubs"){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1607,7 +1607,7 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
-					if(mano.color != "Diamond"){
+					if(mano.suit != "Diamond"){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
@@ -1631,7 +1631,7 @@ function executeNextAction(){
 						canExecute = false;
 						return false;
 					}
-					if(mano.color != "Spades"){
+					if(mano.suit != "Spades"){
 						printAction("True");
 						CIindex += 3;
 						return executeNextAction();
