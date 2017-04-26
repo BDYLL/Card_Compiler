@@ -73,7 +73,7 @@ const DIFFERENT=286;
 const ISEMPTY=250;
 const ISNOTEMPTY=251;
 
-const VALUE=-32;
+const VALUE=280;
 
 let codIntermedio = [];
 let stack = [];
@@ -607,7 +607,7 @@ function callCustomerFunction(functionName){
     }
 
 	let funcPosition = theFunc[0].index;
-	codIntermedio[i++]=JMP;
+	codIntermedio[i++]=CALL;
 	codIntermedio[i++]=funcPosition;
 }
 
@@ -1228,12 +1228,16 @@ function executeNextAction(){
 
 	switch(codIntermedio[CIindex]){
 		case JMP:
-		  if(codIntermedio[codIntermedio[CIindex+1]] <= -33){
+		  /*if(codIntermedio[codIntermedio[CIindex+1]] <= -33){
 				afterFunction.push(CIindex + 2);
-			}
+			}*/
 			CIindex = codIntermedio[CIindex + 1];
 			return executeNextAction();
-		case IF:
+		case CALL:
+            afterFunction.push(CIindex + 2);
+            CIindex = codIntermedio[CIindex + 1];
+            return executeNextAction();
+        case IF:
 			if(codIntermedio[CIindex] == IF)
 				printAction("IF: ");
 		case WHILE:
