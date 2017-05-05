@@ -5,11 +5,3 @@ Diego Yañez
 Isaac Morelos
 Bryan Arroyo
 Gabriel Aviles
-
-
-#PARSER
-
-En esta branch creare variables de estado lfgsldnfgjasnknsf
-
-
-y funciones para alterarlas
